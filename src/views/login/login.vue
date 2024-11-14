@@ -76,11 +76,9 @@ export default {
  
         that.logining = false;
         if (res.code == 0) {
-          that.$store.commit( "setuserCode",
-            // JSON.stringify(loginParams.userCode),
-            that.AuthMenuList(res.userToken),
-            // sessionStorage.setItem('userCode', loginParams.userCode)
-          );
+          that.$store.commit( "setusermobile",loginParams.mobile,sessionStorage.setItem('usermobile', loginParams.mobile));
+          that.$store.commit( "setuserpassword ",loginParams.password,sessionStorage.setItem('userpassword', loginParams.password));
+          that.AuthMenuList(res.userToken)
         }
       });
     },

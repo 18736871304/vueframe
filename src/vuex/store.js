@@ -7,10 +7,10 @@ Vue.use(Vuex)
 
 // 应用初始状态
 const state = {
-    userCode: '',
+    usermobile: '',
     count: 10,
     rightList: sessionStorage.getItem('rightList') || [],
-    username: sessionStorage.getItem('user') || '',
+    username: sessionStorage.getItem('userpassword') || '',
     isCollapse: false,
     activeRouter:'',//当前路由
 }
@@ -18,18 +18,19 @@ const state = {
 // 定义所需的 mutations
 const mutations = {
     // 储存账号
-    setuserCode(state, data) {
-        state.userCode = data
+    setusermobile(state, data) {
+        state.usermobile = data
+    },  
+      setuserpassword(state, data) {
+        state.userpassword = data
+        sessionStorage.setItem('userpassword', data)
     },
     // 储存侧边导航菜单
     setRightList(state, data) {
         state.rightList = data
         sessionStorage.setItem('rightList', data)
     },
-    setUsername(state, data) {
-        state.username = data
-        sessionStorage.setItem('username', data)
-    },
+
 
     // 折叠按钮
     setCollapse(state, data) {
@@ -39,8 +40,6 @@ const mutations = {
     saveMenuList(state, data) {
         state.rightList = data;
     },
-
-
 
 
     setActiveIndex(state, value) {

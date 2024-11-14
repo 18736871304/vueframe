@@ -39,47 +39,51 @@ axios.interceptors.request.use(config => {
   return config
 })
 //前置路由导航守卫
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
+  console.log(to, from, next)
 
-  // if (to.path == '/login') {
-  //   sessionStorage.removeItem('username');
-  //   return next();
-  // }
-  // let user = JSON.parse(sessionStorage.getItem('username'));
-  // if (!user && to.path != '/login') {
-  //   next({
-  //     path: '/login'
-  //   })
-  // } else {
-  //   next()
-  // }
+
+  if (to.path == '/login') {
+    sessionStorage.removeItem('usermobile');
+    return next();
+  }
+  let user = JSON.parse(sessionStorage.getItem('usermobile'));
+  console.log(user)
+
+  if (!user && to.path != '/login') {
+    next({
+      path: '/login'
+    })
+  } else {
+    next()
+  }
 
   // 数组字符串转化为数组
-  // var menuList = sessionStorage.getItem('rightList');
-  // // 首先需要判断当用户直接访问该页面时，是否已经登录，登录之后会有session，
-  // //  判断session中是否有请求的菜单地址。如果有，则跳转到该页面。 否则提示，无权限访问
-  // if (menuList) {
-  //   // 下面我要在这里判断，用户访问的to.path，跟我菜单中的path是否一致，
-  //   // 若一致，那么该登录者可以访问此页面，
-  //   // 若不一致，将跳出登录页，或提示用户无权限访问该页面
-  //   let isRequire = searchMenu(menuList, to.path);
-  //   if (isRequire) {
-  //     // 若存在，继续访问
-  //     return next();
-  //   } else {
-  //     if (to.path == '/home') {
-  //       return next();
-  //     } else {
-  //       alert('无权限访问')
-  //     }
+  var menuList = sessionStorage.getItem('rightList');
+  // 首先需要判断当用户直接访问该页面时，是否已经登录，登录之后会有session，
+  //  判断session中是否有请求的菜单地址。如果有，则跳转到该页面。 否则提示，无权限访问
+  if (menuList) {
+    // 下面我要在这里判断，用户访问的to.path，跟我菜单中的path是否一致，
+    // 若一致，那么该登录者可以访问此页面，
+    // 若不一致，将跳出登录页，或提示用户无权限访问该页面
+    let isRequire = searchMenu(menuList, to.path);
+    if (isRequire) {
+      // 若存在，继续访问
+      return next();
+    } else {
+      if (to.path == '/home') {
+        return next();
+      } else {
+        alert('无权限访问')
+      }
 
-  //     // 跳到上一页
-  //     next(from.path);
-  //   }
-  // } else {
-  //   return next('/login')
-  // }
-// })
+      // 跳到上一页
+      next(from.path);
+    }
+  } else {
+    return next('/login')
+  }
+})
 
 // 查找菜单数组中path是否存在,使用递归循环查询该数组是否有children，判断path跟我菜单中的path是否一致；
 function searchMenu(menuList, path) {
