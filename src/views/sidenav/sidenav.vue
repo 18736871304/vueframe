@@ -62,7 +62,6 @@ export default {
   watch: {
     editableTabs: {
       handler(  newVal, oldVal) {
-        console.log("这是显示的菜单"+ newVal, oldVal)
         if (newVal.length == 0) {
           this.$router.push("/home");
         }
@@ -71,10 +70,6 @@ export default {
 
     $route: {
       handler: function (route, aa) {
-
-
-        console.log( route)
-        console.log("当前路由"+route.name)
         this.routeTitle = route.name;
         this.cejv();
       },

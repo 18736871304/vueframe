@@ -69,8 +69,6 @@ export default {
     handleclose() { },
 
     handleselect(key, keyPath) {
-
-      console.log("这是点击的菜单" + key, keyPath)
       if (key == null) {
         return;
       }
@@ -90,8 +88,6 @@ export default {
             }
           }
         } else {
-
-          console.log(keyPath[0], lists[i].path)
           if (keyPath[1] == lists[i].path || keyPath[0] == lists[i].path) {
             aaa = lists[i].menuname;
           }
@@ -103,8 +99,6 @@ export default {
 
 
       keyPath.push(aaa);
-
-      console.log("这是：" + keyPath)
       // childByValue是在父组件on监听的方法
       // 子父传值
       // 第二个参数this.childValue是需要传的值
