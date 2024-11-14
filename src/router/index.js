@@ -30,6 +30,37 @@ var routes = [{
         name: '首页',
       },
 
+   {
+        path: '/UserManage',
+        component: () => import("@/views/authority/UserManage.vue"),
+        name: '用户管理'
+      },
+
+      {
+        path: '/AuthManage',
+        component: () => import("@/views/authority/AuthManage.vue"),
+        name: '权限管理'
+      },
+      {
+        path: '/UserAuthority',
+        component: () => import("@/views/authority/UserAuthority.vue"),
+        name: '用户权限'
+      },
+
+
+
+
+   
+
+      {
+        path: '/PasswordManage',
+        component: () => import("@/views/authority/PasswordManage.vue"),
+        name: '修改密码',
+        leaf:true
+      },
+
+
+
       // admin
       {
         path: '/admin/team/teamMan',
@@ -54,7 +85,7 @@ var routes = [{
         component: () => import("@/views/admin/supplierMan/insorganMan.vue"),
         name: '保险公司管理'
       },
-  
+
 
 
 
@@ -70,19 +101,19 @@ var routes = [{
         component: () => import("@/views/admin/supplierMan/riskamntMan.vue"),
         name: '保险金额管理'
       },
-      
+
       {
         path: '/admin/supplierMan/payintvMan',
         component: () => import("@/views/admin/supplierMan/payintvMan.vue"),
         name: '缴费方式管理'
       },
-      
+
       {
         path: '/admin/supplierMan/payendyearMan',
         component: () => import("@/views/admin/supplierMan/payendyearMan.vue"),
         name: '缴费年期管理'
       },
-      
+
       {
         path: '/admin/supplierMan/insureyearMan',
         component: () => import("@/views/admin/supplierMan/insureyearMan.vue"),
@@ -111,30 +142,7 @@ var routes = [{
 
 
 
-      // organ
-      {
-        path: '/organ/OrganManage',
-        component: () => import("@/views/organ/OrganManage.vue"),
-        name:'机构管理'
-      },
 
-
-      //authority
-      {
-        path: '/authority/AuthManage',
-        component: () => import("@/views/authority/AuthManage.vue"),
-        name:'权限管理'
-      },
-      {
-        path: '/authority/UserAuthority',
-        component: () => import("@/views/authority/UserAuthority.vue"),
-        name:'用户权限'
-      },
-      {
-        path: '/authority/PasswordManage',
-        component: () => import("@/views/authority/PasswordManage.vue"),
-        name:'密码管理'
-      },
 
       // {
       //   path: '/AuthManage',

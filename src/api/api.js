@@ -1,22 +1,39 @@
 import axios from 'axios';
 import Qs from "qs";
-let base = 'https://insure.meihualife.com'; //添加域名
+// let base = 'https://insure.meihualife.com'; //添加域名
+let base = 'http://8.133.195.79'; //添加域名
 
 
 //登录
 export const login = params => {
-  return axios.post(`/logon.do`, Qs.stringify(params)).then(res => res.data);
+  return axios.post(`/api/user/logonByMoblie`, Qs.stringify(params)).then(res => res.data);
 };
 
-// 获取菜单
-export const AuthMenuList = params => {
-  params.iamsOpr = "D012"
-  params.iamsOprName = "魏钦录"
-  params.logonOrgan = 100000000
-  params.iamsOprOrgan = 100000000
-  params.iamsOrganGrade = "01"
-  return axios.post(`/AuthMenuList.do?userCode=${params.iamsOpr}`, Qs.stringify(params)).then(res => res.data);
+//登出
+export const logout = params => {
+  return axios.post(`/api/user/logout`, Qs.stringify(params)).then(res => res.data);
 };
+
+//数据字典
+export const getDictList = params => {
+  return axios.post(`/api/common/getDictList`, Qs.stringify(params)).then(res => res.data);
+};
+
+// 菜单
+export const AuthMenuList = params => {
+  return axios.post(`/api/menu/getAuthMenuList`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+// // 获取菜单
+// export const AuthMenuList = params => {
+//   params.iamsOpr = "D012"
+//   params.iamsOprName = "魏钦录"
+//   params.logonOrgan = 100000000
+//   params.iamsOprOrgan = 100000000
+//   params.iamsOrganGrade = "01"
+//   return axios.post(`/AuthMenuList.do?userCode=${params.iamsOpr}`, Qs.stringify(params)).then(res => res.data);
+// };
 
 // 获取省级
 export const provinceCombox = params => {

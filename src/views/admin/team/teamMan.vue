@@ -168,15 +168,7 @@ export default {
       this.clearINput();
     },
     sureAdd() {
-      // console.log( typeof this.editUpteam);
-      // console.log(typeof this.editUserValue);
-      console.log(this.editTeamName);
-      console.log(this.editUserValue);
-      console.log(this.editOrderNum);
-      console.log(this.editGradeValue);
-      console.log(this.editUpteam);
-      console.log(this.editOrganValue);
-      console.log(this.editisstop);
+  
     },
     clearINput() {
       this.editTeamName = "";

@@ -7,46 +7,18 @@
       <div class="grid-content bg-purple-light">
         <!-- 顶部导航 -->
         <div class="guding" :class="isCollapse ? 'collapsed' : 'expanded'">
-          <el-row
-            class="content-tabs  "
-            ref="titleNav"
-            :style="'width:' + gudingWidth + 'px'"
-          >
-            <i
-              v-if="isShow"
-              leftIcon
-              class="el-icon-d-arrow-left scroll"
-              :class="isCollapse ? 'arrow-left' : 'el-icon-d-arrow-left'"
-              @click="toLeft"
-            ></i>
+          <el-row class="content-tabs  " ref="titleNav" :style="'width:' + gudingWidth + 'px'">
+            <i v-if="isShow" leftIcon class="el-icon-d-arrow-left scroll" :class="isCollapse ? 'arrow-left' : 'el-icon-d-arrow-left'" @click="toLeft"></i>
 
-            <el-button
-              type="primary"
-              v-for="item in editableTabs"
-              :key="item.name"
-              class="tabStyle"
-            >
-              <div
-                :class="{ activeLine: routeTitle == item.title }"
-                class="lineBox"
-              >
-                <router-link ref="ss" :to="item.content"
-                  >{{ item.title }}
+            <el-button type="primary" v-for="item in editableTabs" :key="item.name" class="tabStyle">
+              <div :class="{ activeLine: routeTitle == item.title }" class="lineBox">
+                <router-link ref="ss" :to="item.content">{{ item.title }}
                 </router-link>
-                <i
-                  v-if="!(item.name == 0)"
-                  class="el-icon-close el-icon--right"
-                  @click.stop="removeTab(item.name, item.title, $event)"
-                ></i>
+                <i v-if="!(item.name == 0)" class="el-icon-close el-icon--right" @click.stop="removeTab(item.name, item.title, $event)"></i>
               </div>
             </el-button>
 
-            <i
-              v-if="isShow"
-              rightIcon
-              class="el-icon-d-arrow-right scroll"
-              @click="toRight"
-            ></i>
+            <i v-if="isShow" rightIcon class="el-icon-d-arrow-right scroll" @click="toRight"></i>
           </el-row>
         </div>
         <!-- <div class="hengxian"></div> -->
@@ -89,7 +61,8 @@ export default {
   }),
   watch: {
     editableTabs: {
-      handler(newVal, oldVal) {
+      handler(  newVal, oldVal) {
+        console.log("这是显示的菜单"+ newVal, oldVal)
         if (newVal.length == 0) {
           this.$router.push("/home");
         }
@@ -97,8 +70,11 @@ export default {
     },
 
     $route: {
-      handler: function(route,aa) {
-        console.log(route,aa)
+      handler: function (route, aa) {
+
+
+        console.log( route)
+        console.log("当前路由"+route.name)
         this.routeTitle = route.name;
         this.cejv();
       },
@@ -107,22 +83,20 @@ export default {
 
     isCollapse: {
       handler(newVal, oldVal) {
-        console.log(newVal, oldVal);
+
         this.cejv();
       },
     },
   },
 
   methods: {
-    handleopen() {},
-    handleclose() {},
-    handleselect: function() {},
+    handleopen() { },
+    handleclose() { },
+    handleselect: function () { },
     toLeft() {
-      console.log("往左");
       this.move("left");
     },
     toRight() {
-      console.log("往右");
       this.move("right");
     },
 
@@ -169,9 +143,9 @@ export default {
         }
       }
       this.editableTabs.push({
-        title: data[2],
+        title: data[1],
         name: this.editableTabs.length,
-        content: data[1],
+        content: data[0],
       });
       // this.$refs.titleNav.$el.scrollLeft=6000
       this.scrollLeftNum = this.editableTabs.length;

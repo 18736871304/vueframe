@@ -65,8 +65,7 @@ export default {
     },
     // 确认新增或修改
     sureAdd() {
-      console.log(this.editMenuGroupName);
-      console.log(this.editOrderbyid);
+
     },
     pageClick(page) {
       //点击分页
@@ -107,7 +106,7 @@ export default {
       });
     },
     menuSure() {
-      console.log(this.$refs.tree.getCheckedKeys());
+ 
     },
 
     handleEdit(item) {

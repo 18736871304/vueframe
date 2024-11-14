@@ -44,7 +44,6 @@ const mutations = {
 
 
     setActiveIndex(state, value) {
-        console.log(value)
         state.activeRouter = value
     },
 

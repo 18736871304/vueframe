@@ -2,57 +2,20 @@
   <el-aside :class="isCollapse ? 'menu-collapsed' : 'menu-expanded'">
     <!-- 折叠按钮 -->
     <!--导航菜单   v-show="!collapsed"  :collapse="isCollapse"-->
-    <el-menu
-      background-color="#001529"
-      text-color="#ffffffb3"
-      active-text-color="#fff"
-      unique-opened
-      router
-      :default-active="String(this.$route.path)"
-      class="el-menu-vertical-demo"
-      @open="handleopen"
-      @close="handleclose"
-      @select="handleselect"
-      :collapse="isCollapse"
-      ref="menu"
-      style="overflow: scroll;height: 100%;"
-    >
+    <el-menu background-color="#001529" text-color="#ffffffb3" active-text-color="#fff" unique-opened router :default-active="String(this.$route.path)" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" :collapse="isCollapse" ref="menu" style="overflow: scroll;height: 100%;">
       <template v-for="(item, index) in rightList">
-        <el-submenu
-          :key="index"
-          :index="index + ''"
-          style="text-align: left;  color:#001529"
-        >
+        <el-submenu :key="index" :index="index + ''" style="text-align: left;  " v-if="item.childmenu.length>0">
           <template slot="title">
-            <i
-              :class="item.icon"
-              class="el-icon-message"
-              style="margin-right:5px; color:#001529"
-            ></i>
+            <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
             <span slot="title">{{ item.menuname }}</span>
           </template>
 
-          <el-menu-item
-            class="child"
-            v-for="(child, index) in item.childmenu"
-            :index="child.path"
-            :key="index"
-            >{{ child.menuname }}</el-menu-item
-          >
+          <el-menu-item class="child" v-for="(child, index) in item.childmenu" :index="child.path" :key="index">{{ child.menuname  }}</el-menu-item>
         </el-submenu>
-        <!-- 预防一级菜单有内容 -->
-        <el-menu-item
-          :key="item.index"
-          v-if="item.leaf && item.child.length > 0"
-          :index="item.child[0].path"
-          style="text-align: left; color:#001529"
-        >
-          <i
-            :class="item.icon"
-            class="el-icon-s-data"
-            style="margin-right:5px; color:#001529"
-          ></i>
-          <span slot="title">{{ item.child[0].menuname }}</span>
+        <!-- 预防一级菜单有内容  item.leaf && item.child.length > 0-->
+        <el-menu-item :key="item.index" v-else :index="item.path" style="text-align: left; ">
+          <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
+          <span slot="title">{{ item.menuname }} </span>
         </el-menu-item>
       </template>
     </el-menu>
@@ -60,7 +23,6 @@
     <!--导航菜单-折叠后-->
   </el-aside>
 </template>
-
 <script>
 import { mapState } from "vuex";
 export default {
@@ -78,6 +40,8 @@ export default {
 
     ...mapState(["activeRouter"]),
     rightList() {
+
+
       return eval("(" + this.$store.state.rightList + ")"); //用computed接收
     },
     defaultActive() {
@@ -97,21 +61,28 @@ export default {
     },
   },
 
-  created() {},
+  created() { },
 
   methods: {
     handleopen(routerName) {
     },
-    handleclose() {},
+    handleclose() { },
 
     handleselect(key, keyPath) {
+
+      console.log("这是点击的菜单" + key, keyPath)
       if (key == null) {
         return;
       }
+      if (keyPath[0] == '0') {
+        keyPath.shift()
+      }
+
+
       var aaa = "";
       var lists = this.rightList;
       for (let i = 0; i < lists.length; i++) {
-        if (lists[i].childmenu) {
+        if (lists[i].childmenu && lists[i].childmenu.length > 0) {
           var bbb = lists[i].childmenu;
           for (let j = 0; j < bbb.length; j++) {
             if (keyPath[1] == bbb[j].path || keyPath[0] == bbb[j].path) {
@@ -119,12 +90,21 @@ export default {
             }
           }
         } else {
+
+          console.log(keyPath[0], lists[i].path)
           if (keyPath[1] == lists[i].path || keyPath[0] == lists[i].path) {
             aaa = lists[i].menuname;
           }
         }
       }
+
+
+
+
+
       keyPath.push(aaa);
+
+      console.log("这是：" + keyPath)
       // childByValue是在父组件on监听的方法
       // 子父传值
       // 第二个参数this.childValue是需要传的值
@@ -153,8 +133,6 @@ export default {
 .header {
   width: 100%;
 }
-
-
 
 .username {
   font-size: 15px;

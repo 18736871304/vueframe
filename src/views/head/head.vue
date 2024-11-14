@@ -205,7 +205,6 @@ export default {
     },
     toFullOrExit() {
       this.isFull = !this.isFull;
-      console.log(this.isFull);
       if (this.isFull) {
         // this.fullImg = require("@/assets/logo.png");
         this.requestFullScreen();

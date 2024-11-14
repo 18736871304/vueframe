@@ -1,5 +1,5 @@
 <template>
-  <div class="UserAuthority"> 用户权限</div>
+  <div class="UserAuthority"> 用户管理</div>
 </template>
 
 <script>
@@ -62,6 +62,7 @@ export default {
         rows: 10,
       };
       getUserAuthorList(reporParams).then((res) => {
+  
         this.userAuthList = res.rows;
         this.pageTotal = res.total;
         // if (res.code == "1") {

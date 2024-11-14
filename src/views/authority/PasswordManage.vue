@@ -44,7 +44,7 @@ export default {
         rows: 10,
       };
       getUserList20(reporParams).then((res) => {
-        console.log(res);
+
         this.getUserList = res.rows;
         this.pageTotal = res.total;
         // if (res.code == "1") {
@@ -71,13 +71,12 @@ export default {
         passWord: md5(this.editPassWord).toUpperCase(),
       };
       psdUpdate(reporParams).then((res) => {
-        console.log(res)
+
         // this.organGradeList = res;
       });
     },
 
     handleEdit(item) {
-      console.log(item);
       this.edituserCode = item.userCode;
       this.dialogFormVisible = true;
       this.dig_title = "编辑";

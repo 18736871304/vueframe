@@ -24,9 +24,7 @@ export default {
   },
   methods: {
     getson() {
-      console.log(this.$children[0]);
       this.getsonDatas = this.$children[0].selectValue;
-      console.log(this.getsonDatas);
     },
     chongzhi() {
       this.getsonDatas = {

@@ -5,40 +5,20 @@
       <div class="avatar_box">
         <img src="../../assets/user.png" />
       </div>
-      <el-form
-        label-width="60px"
-        class="login_form"
-        :model="ruleForm2"
-        ref="ruleForm2"
-      >
+      <el-form label-width="60px" class="login_form" :model="ruleForm2" ref="ruleForm2">
         <el-form-item label="账号:">
-          <el-input
-            prefix-icon="el-icon-s-custom"
-            v-model="ruleForm2.mobile"
-            placeholder="请输入账号"
-            class="user"
-            @keyup.enter.native="goToPwdInput"
-          ></el-input>
+          <el-input prefix-icon="el-icon-s-custom" v-model="ruleForm2.mobile" placeholder="请输入账号" class="user" @keyup.enter.native="goToPwdInput"></el-input>
         </el-form-item>
 
         <el-form-item label="密码:">
-          <el-input
-            prefix-icon="el-icon-search"
-            v-model="ruleForm2.password"
-            placeholder="请输入密码"
-            class="password"
-            @keyup.enter.native="onLogin"
-            ref="pwd"
-          ></el-input>
+          <el-input prefix-icon="el-icon-search" v-model="ruleForm2.password" placeholder="请输入密码" class="password" @keyup.enter.native="onLogin" ref="pwd"></el-input>
         </el-form-item>
 
         <!-- <el-checkbox v-model="checked" checked class="remember jipassword"
           >记住密码</el-checkbox
         > -->
 
-        <el-button type="primary" class="primary" @click="onLogin('loginForm')"
-          >登录</el-button
-        >
+        <el-button type="primary" class="primary" @click="onLogin('loginForm')">登录</el-button>
         <!-- <el-form-item class="btns">
           <el-button type="primary">登录</el-button>
           <el-button type="info">重置</el-button>
@@ -87,58 +67,59 @@ export default {
       //   password: md5(this.ruleForm2.password).toUpperCase(),
       // };
       var loginParams = {
-        userCode: "D012",
-        passWord: md5("Wei123456").toUpperCase(),
+        mobile: "13888888888",
+        password: "E10ADC3949BA59ABBE56E057F20F883E",
+        // passWord: md5("123456").toUpperCase(),
       };
 
       login(loginParams).then((res) => {
-        console.log(res);
+ 
         that.logining = false;
         if (res.code == 0) {
-          that.$store.commit(
-            "setuserCode",
-            JSON.stringify(loginParams.userCode),
-            that.AuthMenuList(),
-            sessionStorage.setItem('userCode', loginParams.userCode)
-          );  
+          that.$store.commit( "setuserCode",
+            // JSON.stringify(loginParams.userCode),
+            that.AuthMenuList(res.userToken),
+            // sessionStorage.setItem('userCode', loginParams.userCode)
+          );
         }
       });
     },
     //获取菜单
 
-    AuthMenuList() {
-      var params = {};
+    AuthMenuList(userToken) {
+      var params = {
+        userToken: userToken
+      };
       AuthMenuList(params).then((res) => {
-        console.log(res);
         let rightList = [];
         if (res.length > 0) {
           for (let i = 0; i < res.length; i++) {
-            if (res[i].children.length > 0) {
+
+            if (res[i].childmenu && res[i].childmenu.length > 0) {
               let childmenuList = [];
-              for (let j = 0; j < res[i].children.length; j++) {
+              for (let j = 0; j < res[i].childmenu.length; j++) {
                 childmenuList.push({
-                  path: res[i].children[j].url.replace( "commonMenu.do?menuurl=",  "/" ),
-                  menuname: res[i].children[j].text,
-                  menuid: res[i].children[j].id,
+                  path: res[i].childmenu[j].path,
+                  menuname: res[i].childmenu[j].menuname,
+                  menuid: res[i].childmenu[j].menuid,
                 });
               }
               rightList.push({
-                path: res[i].url,
-                menuname: res[i].text,
+                path: res[i].path,
+                menuname: res[i].menuname,
                 childmenu: childmenuList,
-                menuid: res[i].id,
+                menuid: res[i].menuid,
               });
             } else {
               rightList.push({
-                path: res[i].url,
-                menuname: res[i].text,
+                path: res[i].path,
+                menuname: res[i].menuname,
                 childmenu: [],
-                menuid: res[i].id,
+                menuid: res[i].menuid,
               });
             }
           }
           this.$store.commit("setRightList", JSON.stringify(rightList));
-          console.log(rightList);
           this.$router.push("/home");
         }
 

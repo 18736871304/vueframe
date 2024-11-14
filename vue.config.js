@@ -24,8 +24,8 @@ module.exports = {
     proxy: {
       '/': {
         // 目标代理服务器地址
-        target: 'https://insure.meihualife.com',
-        // target: 'http://101.132.129.58:18072',
+        // target: 'https://insure.meihualife.com',
+        target: 'http://8.133.195.79',
         // 开启代理，本地创建一个虚拟服务器 允许跨域
         changeOrigin: true,
         ws: false,
