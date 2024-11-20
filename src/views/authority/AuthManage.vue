@@ -1,158 +1,306 @@
 <template>
-  <div class="AuthManage">权限管理</div>
+  <div class="template">
+    <div class="search">
+      <div class="common_hang">
+        <div class="mech">菜单组名称</div>
+        <el-input v-model="menuName" clearable placeholder="请输入内容"></el-input>
+      </div>
+
+      <!-- <div class="common_hang">
+        <div class="mech">姓名</div>
+        <el-input v-model="name" placeholder="请输入内容"></el-input>
+      </div> -->
+
+      <el-button type="primary" @click="getMenuGroupList(1)">查询</el-button>
+      <el-button type="primary" @click="addMenu">新增</el-button>
+    </div>
+
+    <div class="table_list">
+      <!-- <el-table :data="MenuGroupList" :header-cell-style="{ background: '#f8f8f9', color: '#606266' }" highlight-current-row  style="width: 100%;"> -->
+        <el-table :data="MenuGroupList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row    @current-change="handleCurrentChange">
+
+
+
+
+        <el-table-column type="index" width="40" align="center"></el-table-column>
+        <el-table-column prop="makedatestr" label="最后一次操作时间" width="190" align="center" sortable></el-table-column>
+        <el-table-column prop="menugroupname" label="菜单组名称" width="auto" align="center"></el-table-column>
+        <el-table-column prop="oprname" label="创建人" width="130" align="center"></el-table-column>
+
+        <el-table-column label="操作" align="center" width="150">
+          <template slot-scope="scope">
+            <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
+            <el-button type="danger" size="small" @click="handleDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination background @current-change="pageClick" :page-size="pageSize" :current-page="pageNum" layout="total, prev, pager, next" :total="pageTotal" class="indexPage">
+      </el-pagination>
+    </div>
+    <div class="rolesTree">
+      <el-button type="primary" @click="getCheckedKeys">关联菜单</el-button>
+      <el-tree :data="rolesTree" show-checkbox node-key="menuid" ref="rolestree" highlight-current :props="defaultProps" :default-checked-keys="defaultCheckedNode" :check-strictly="checkStrictly" :expand-on-click-node="false">
+      </el-tree>
+    </div>
+    <el-dialog title="" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+      <el-form>
+        <el-form-item label="菜单名称">
+          <el-input v-model="inputMenu" placeholder="请输入菜单名称" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="sureAdd">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-import { disComBox, getMenuGrpList, getMenuList } from "../../api/api";
+import { getMenuGroupList,addMenuGroup,editMenuGroup,deleteMenuGroup ,getMenuListByMenuGroup,createMenuRelation} from "../../api/api";
 export default {
   data() {
     return {
-      menuGrpList: [],
-      menuGroupName: "",
-      //添加、修改
-      dig_title: "新增",
+      phone: "",
+      name: "",
+      MenuGroupList: [],
       dialogFormVisible: false,
-      editMenuGroupName: "",
-      editOrderbyid: "",
-      //关联菜单
-      diaMenuVisible: false,
-      menutypeList: [],
-      menutype: "core",
-      menuGroupCode: "",
-      treeData: [],
-      defaultProps: {
-        children: "children",
-        label: "text",
-      },
+      menuName: "",
+      menugroupserialno: "",
+      inputMenu: "",
       // 分页
       pageTotal: 0,
-      pageSize: 20,
+      pageSize: 10,
       pageNum: 1,
-      tableHeight: 0,
+
+      currentRow: null,
+      checkStrictly: false,
+      defaultCheckedNode: [],
+      rolesTree: [],
+
+      defaultProps: {
+        children: "childmenu",
+        label: "menuname",
+      },
     };
   },
-
   created() {
- 
-  },
-  mounted() {
- 
+    this.getMenuGroupList(1);
   },
   methods: {
-    init() {
-      // 获取所有系统
-      disComBox({ comboxType: "menutype" }).then((res) => {
-        this.menutypeList = res;
-      });
-    },
-
-    getMenuGrpList(page) {
-      this.pageNum = page;
+    // 获取表单
+    getMenuGroupList(page) {
+      var that = this;
       var reporParams = {
-        menuGroupCode: this.menuGroupName,
-        menuGroupName: this.menuGroupName,
+
+        menugroupname: this.menuName,
         pageNumber: page,
         pageSize: this.pageSize,
-        page: 1,
-        rows: 10,
       };
-
-      getMenuGrpList(reporParams).then((res) => {
-     
-        this.menuGrpList = res.rows;
-        this.pageTotal = res.total;
+      getMenuGroupList(reporParams).then((res) => {
+        if (res.code == "1") {
+          that.$message({
+            type: "error",
+            duration: 3000,
+            message: res.msg,
+          });
+        } else {
+          this.MenuGroupList = res.rows;
+          this.pageTotal = res.total;
+        }
       });
     },
     // 确认新增或修改
     sureAdd() {
+      var that = this;
+      if (this.menugroupserialno == "") {
+        var reporParams = {
+          menugroupname: this.inputMenu,
+        };
+        addMenuGroup(reporParams).then((res) => {
+          if (res.code == "0") {
+            that.$message({
+              type: "success",
+              duration: 3000,
+              message: "添加成功",
+            });
+            that.dialogFormVisible = false;
+            that.getMenuGroupList(1);
+            that.clearINput();
+          } else {
+            that.$message({
+              type: "error",
+              duration: 3000,
+              message: "添加失败",
+            });
+          }
+        });
+      } else {
+        var reporParams = {
+  
+          menugroupname: this.inputMenu,
+          menugroupserialno: this.menugroupserialno,
+        };
 
+        editMenuGroup(reporParams).then((res) => {
+          if (res.code == "0") {
+            that.$message({
+              type: "success",
+              duration: 3000,
+              message: "修改成功",
+            });
+            that.dialogFormVisible = false;
+            that.getMenuGroupList(1);
+            that.clearINput();
+          } else {
+            that.$message({
+              type: "error",
+              duration: 3000,
+              message: "修改失败",
+            });
+          }
+        });
+      }
+    },
+    //打开修改
+    handleEdit(item) {
+      this.dialogFormVisible = true;
+      this.inputMenu = item.menugroupname;
+      this.menugroupserialno = item.menugroupserialno;
+    },
+    // 删除
+    handleDel(item) {
+      // this.menugroupserialno = item.menugroupserialno;
+      var that = this;
+      this.$confirm("确认删除吗?", "提示", {
+        type: "warning",
+      }).then(() => {
+        var reporParams = {
+           menugroupserialno: item.menugroupserialno,
+        };
+        deleteMenuGroup(reporParams).then((res) => {
+          if (res.code == "0") {
+            that.$message({
+              type: "success",
+              duration: 3000,
+              message: "删除成功",
+            });
+            that.getMenuGroupList(1);
+          } else {
+            that.$message({
+              type: "error",
+              duration: 3000,
+              message: "删除失败",
+            });
+          }
+        });
+      });
     },
     pageClick(page) {
       //点击分页
       this.pageNum = page;
-      this.getMenuGrpList(page);
+      this.getMenuGroupList(page);
     },
 
-    diaMenuClose() {
-      this.treeData = [];
-      this.diaMenuVisible = false;
-    },
-    menuEdit(item) {
-      this.menuGroupCode = item.menuGroupCode;
-      this.changeMenutype();
-      this.diaMenuVisible = true;
-    },
-    //获取权限列表
-    changeMenutype() {
-      var reporParams = {
-        menuGroupCode: this.menuGroupCode,
-        menutype: "'" + this.menutype + "'",
-      };
-      getMenuList(reporParams).then((res) => {
-        this.treeData = res;
-        var array = [];
-        for (var i = 0; i < res.length; i++) {
-          let children = res[i].children;
-          if (children.length > 0) {
-            for (var j = 0; j < children.length; j++) {
-              if (children[j].checked == "true") {
-                array.push(children[j].id);
-              }
-            }
-          }
-        }
-        this.$refs.tree.setCheckedKeys(array);
-        // this.pageTotal = res.total;
-      });
-    },
-    menuSure() {
- 
-    },
-
-    handleEdit(item) {
-      this.editMenuGroupName = item.menuGroupName;
-      this.editOrderbyid = item.orderbyid;
-      this.dialogFormVisible = true;
-      this.dig_title = "编辑";
-    },
     // 打开新增
-    addUser() {
+    addMenu() {
+      this.menugroupserialno = "";
       this.dialogFormVisible = true;
-      this.isinsert = true;
-      this.dig_title = "新增";
     },
     handleClose() {
       this.dialogFormVisible = false;
       this.clearINput();
+      this.getMenuGroupList(1);
     },
     // 取消新增
     cancel() {
       this.dialogFormVisible = false;
       this.clearINput();
+      this.getMenuGroupList(1);
     },
     clearINput() {
-      this.editMenuGroupName = "";
-      this.editOrderbyid = "";
+      this.inputMenu = "";
+      this.menugroupserialno = "";
+    },
+
+    handleNodeCheck() { },
+    getRolesTree(item) {
+      if (item == null) {
+      } else {
+        this.menugroupserialno = item.menugroupserialno;
+        var reporParams = {
+        
+          menugroupserialno: item.menugroupserialno,
+        };
+        getMenuListByMenuGroup(reporParams).then((res) => {
+          this.rolesTree = res;
+          this.getArray(this.rolesTree, "true", []);
+        });
+      }
+    },
+
+    //获取默认选中的数组
+    getArray(data, name, lst) {
+      var tempArr = lst,
+        _this = this;
+      data.map((item) => {
+        if (item.checked == name) {
+          tempArr.push(item.menuid);
+          if (!!item.childmenu && typeof item.childmenu == "object") {
+            _this.getArray(item.childmenu, name, tempArr);
+          }
+        } else {
+          if (!!item.childmenu && typeof item.childmenu == "object") {
+            _this.getArray(item.childmenu, name, tempArr);
+          }
+        }
+      });
+      this.$refs.rolestree.setCheckedKeys(tempArr);
+      return tempArr;
+    },
+
+    getCheckedKeys() {
+      var that = this;
+      var reporParams = {
+       
+        menugroupserialno: this.menugroupserialno,
+        menuRelaTionStr: this.$refs.rolestree.getCheckedKeys().toString(),
+      };
+      createMenuRelation(reporParams).then((res) => {
+        //  this.menugroupserialno=''
+        if (res.code == "0") {
+          that.$message({
+            type: "success",
+            duration: 3000,
+            message: "关联成功",
+          });
+        } else {
+          that.$message({
+            type: "error",
+            duration: 3000,
+            message: "关联失败",
+          });
+        }
+      });
+    },
+
+    handleCurrentChange(val) {
+      this.getRolesTree(val);
+      this.currentRow = val;
+    },
+
+    resetChecked() {
+      this.$refs.tree.setCheckedKeys([]);
     },
   },
 };
 </script>
-
-<style scoped>
-.AuthManage {
-  padding: 30px 30px 10px;
-  margin-bottom: -15px;
-}
-.search {
-  display: flex;
-  flex-flow: wrap;
-  /* padding-bottom: 20px; */
-}
+<style>
 /* 这是筛选项的内容 */
 .common_hang {
   display: flex;
-  width: 270px;
-  margin-bottom: 10px;
+  width: 350px;
 }
 .common_hang .mech {
   width: 100px;
@@ -163,39 +311,49 @@ export default {
   color: #909399;
 }
 .common_hang .el-input {
-  width: 150px;
+  width: 210px;
 }
 .common_hang .el-input .el-input__inner {
-  width: 150px;
+  width: 210px;
   border-radius: 0;
   height: 35px;
 }
 .common_hang .el-select .el-input {
-  width: 150px;
+  width: 210px;
 }
-
-/* 筛选项结束 */
-.dig {
-  text-align: center;
+.search {
+  /* margin-top: 20px; */
+  display: flex;
+  padding: 0px 10px 10px;
+}
+.el-pagination {
+  text-align: right;
+}
+.table_list {
+  padding: 10px;
 }
 .indexPage {
   text-align: right;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.dig_box {
+.rolesTree {
   display: flex;
-  align-content: center;
-  margin-bottom: 25px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 50px;
+  margin-left: 10px;
 }
-
-.common_hang .el-select {
-  width: 150px;
+.rolesTree .el-button {
+  margin-right: 130px;
 }
-
-.el-button--primary {
-  height: 35px !important;
-  /* line-height: 35px!important;
-  text-align: center!important; */
+.el-tree-node__content {
+  height: 30px;
+}
+.el-tree-node__label {
+  font-size: 16px;
+}
+.el-dialog__header {
+  padding: 0;
 }
 </style>

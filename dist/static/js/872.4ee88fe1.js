@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkmeihua"]=self["webpackChunkmeihua"]||[]).push([[872],{44872:(e,n,t)=>{t.r(n),t.d(n,{default:()=>o});var u=function(){var e=this,n=e._self._c;return n("div",[e._v("机构管理")])},a=[];t(40412);const c={data:function(){return{}},created:function(){},mounted:function(){},methods:{}},r=c;var s=t(81656),i=(0,s.A)(r,u,a,!1,null,"a67e0834",null);const o=i.exports}}]);
-//# sourceMappingURL=872.4ee88fe1.js.map

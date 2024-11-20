@@ -1,12 +1,7 @@
 <template>
   <el-col :span="24" class="header">
     <el-col :span="1" :class="isCollapse ? 'head_logo' : 'big_logo'">
-      <img
-        src="../../assets/logo.png"
-        alt=""
-        :class="isCollapse ? 'logo_img' : 'big_logo_img'"
-        class="logo_img"
-      />
+      <img src="../../assets/logo.png" alt="" :class="isCollapse ? 'logo_img' : 'big_logo_img'" class="logo_img" />
     </el-col>
     <!-- <el-col
       :span="14"
@@ -15,11 +10,8 @@
       >{{ sysName }}</el-col
     > -->
 
-    <el-col :span="1"  class="nav_head">
-      <el-radio-group
-        v-model="isCollapse"
-        :class="isCollapse ? 'el-radio-group1' : 'el-radio-group gg'"
-      >
+    <el-col :span="1" class="nav_head">
+      <el-radio-group v-model="isCollapse" :class="isCollapse ? 'el-radio-group1' : 'el-radio-group gg'">
         <i v-show="!isCollapse" class="el-icon-s-fold" @click="Collapse"></i>
         <i v-show="isCollapse" class="el-icon-s-unfold" @click="noCollapse"></i>
       </el-radio-group>
@@ -49,9 +41,9 @@
     <el-col :span="2" class="userinfo userinfo1">
       <el-dropdown trigger="hover">
         <div class="el-dropdown-link userinfo-inner">
-          <img src="../../assets/user.png" />
+          <!-- <img src="../../assets/user.png" /> -->
           <div class="username">
-            <span>魏钦录,退出</span>
+            <span> {{ username }},退出</span>
             <i class="el-icon-caret-bottom"></i>
           </div>
         </div>
@@ -79,21 +71,14 @@
       </el-popover>
     </el-col>
     <el-col :span="1" class="nav_head" style="float: right;">
-      <el-radio-group
-        v-model="isFull"
-        :class="isFull ? 'el-radio-group1' : 'el-radio-group gg'"
-      >
-        <i
-          v-show="!isFull"
-          class="el-icon-full-screen"
-          @click="toFullOrExit"
-        ></i>
+      <el-radio-group v-model="isFull" :class="isFull ? 'el-radio-group1' : 'el-radio-group gg'">
+        <i v-show="!isFull" class="el-icon-full-screen" @click="toFullOrExit"></i>
         <i v-show="isFull" class="el-icon-aim" @click="toFullOrExit"></i>
       </el-radio-group>
     </el-col>
 
     <el-col :span="8" class="nav_head" style="float: none; width:auto">
-      <span class="mingyan">你努力工作的样子真美</span>
+      <span class="mingyan">易昂知识库管理系统</span>
     </el-col>
   </el-col>
 </template>
@@ -109,12 +94,15 @@ export default {
       isCollapse: false,
       fullImg: "",
       isFull: false,
+      username: ''
     };
   },
 
   mounted() {
+
+    this.username = sessionStorage.getItem('username')
     let that = this;
-    window.addEventListener("resize", function() {
+    window.addEventListener("resize", function () {
       if (!that.isFullScreen()) {
         if (that.isFull) {
           that.isFull = !that.isFull;
@@ -126,15 +114,15 @@ export default {
   },
 
   methods: {
-    Collapse: function() {
+    Collapse: function () {
       this.isCollapse = true;
       this.$store.commit("setCollapse", true);
     },
-    noCollapse: function() {
+    noCollapse: function () {
       this.isCollapse = false;
       this.$store.commit("setCollapse", false);
     },
-    logout: function() {
+    logout: function () {
       var that = this;
 
       this.$confirm("确认退出吗?", "提示", {
@@ -144,12 +132,13 @@ export default {
           sessionStorage.removeItem("userCode");
           that.$router.push("/login");
           var reporParams = {
-            userToken: sessionStorage.getItem("token"),
+            userToken: sessionStorage.getItem("userToken"),
           };
           logout(reporParams).then((res) => {
             sessionStorage.removeItem("rightList");
-            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("userToken");
             sessionStorage.removeItem("username");
+            sessionStorage.removeItem("usermobile");
             that.$router.push("/login");
             // if (res.code == "0") {
             //   sessionStorage.removeItem("rightList");
@@ -166,7 +155,7 @@ export default {
             // }
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     // 全屏
     requestFullScreen() {
@@ -234,8 +223,8 @@ export default {
   width: 230px;
 }
 .logo_img {
-  width: 50px;
-  height: 50px;
+  width: 98.28px;
+  height: 50.44px;
 }
 
 .big_logo {
@@ -243,10 +232,7 @@ export default {
   background: #001529;
   height: 50px;
 }
-.big_logo_img {
-  width: 150px;
-  height: 50px;
-}
+
 .logo {
   width: 145.5px;
   color: #fff;
@@ -267,8 +253,8 @@ export default {
   cursor: pointer;
   margin: 0 auto;
 }
-.nav_head i{
-   color: #fff;
+.nav_head i {
+  color: #fff;
 }
 .tools {
   padding: 0px 23px;
@@ -333,8 +319,9 @@ export default {
   color: #fff;
 }
 
-.userinfo1  i,.userinfo1 span{
-   color: #fff;
+.userinfo1 i,
+.userinfo1 span {
+  color: #fff;
 }
 .main {
   display: flex;
@@ -460,7 +447,9 @@ export default {
     background-position: -400% 0;
   }
 }
-
+.mingyan {
+  -webkit-text-fill-color: #fff;
+}
 .mingyan:hover {
   -webkit-animation: flowCss 4s infinite linear;
 }

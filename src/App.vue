@@ -27,6 +27,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.template{
+  padding: 30px 30px 10px;
+}
 .el-input__inner {
   height: 35px !important;
   line-height: 35px !important;

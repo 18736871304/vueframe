@@ -10,9 +10,9 @@ const state = {
     usermobile: '',
     count: 10,
     rightList: sessionStorage.getItem('rightList') || [],
-    username: sessionStorage.getItem('userpassword') || '',
+    username: sessionStorage.getItem('username') || '',
     isCollapse: false,
-    activeRouter:'',//当前路由
+    activeRouter: '', //当前路由
 }
 
 // 定义所需的 mutations
@@ -20,11 +20,11 @@ const mutations = {
     // 储存账号
     setusermobile(state, data) {
         state.usermobile = data
-    },  
-      setuserpassword(state, data) {
-        state.userpassword = data
-        sessionStorage.setItem('userpassword', data)
     },
+    //   setuserpassword(state, data) {
+    //     state.userpassword = data
+    //     sessionStorage.setItem('userpassword', data)
+    // },
     // 储存侧边导航菜单
     setRightList(state, data) {
         state.rightList = data

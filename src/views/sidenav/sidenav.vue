@@ -70,6 +70,7 @@ export default {
 
     $route: {
       handler: function (route, aa) {
+        console.log(route)
         this.routeTitle = route.name;
         this.cejv();
       },

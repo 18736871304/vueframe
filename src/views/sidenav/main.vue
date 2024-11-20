@@ -2,12 +2,12 @@
   <el-aside :class="isCollapse ? 'menu-collapsed' : 'menu-expanded'">
     <!-- 折叠按钮 -->
     <!--导航菜单   v-show="!collapsed"  :collapse="isCollapse"-->
-    <el-menu background-color="#001529" text-color="#ffffffb3" active-text-color="#fff" unique-opened router :default-active="String(this.$route.path)" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" :collapse="isCollapse" ref="menu" style="overflow: scroll;height: 100%;">
+    <el-menu background-color="#001529" text-color="#ffffffb3" active-text-color="#fff"   unique-opened router :default-active="String(this.$route.path)" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" :collapse="isCollapse" ref="menu" style="overflow: scroll;height: 100%;">
       <template v-for="(item, index) in rightList">
         <el-submenu :key="index" :index="index + ''" style="text-align: left;  " v-if="item.childmenu.length>0">
           <template slot="title">
             <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-            <span slot="title">{{ item.menuname }}</span>
+            <span slot="title">{{ item.menuname }} {{  index}}</span>
           </template>
 
           <el-menu-item class="child" v-for="(child, index) in item.childmenu" :index="child.path" :key="index">{{ child.menuname  }}</el-menu-item>
@@ -32,16 +32,16 @@ export default {
       tabIndex: 1, //tab目前显示数
       // isCollapse: false,
       // rightList: [],
+    
     };
   },
 
   computed: mapState({
     ...mapState(["isCollapse"]),
 
+
     ...mapState(["activeRouter"]),
     rightList() {
-
-
       return eval("(" + this.$store.state.rightList + ")"); //用computed接收
     },
     defaultActive() {
@@ -61,10 +61,13 @@ export default {
     },
   },
 
-  created() { },
+  created() {
+
+  },
 
   methods: {
     handleopen(routerName) {
+
     },
     handleclose() { },
 
@@ -72,11 +75,10 @@ export default {
       if (key == null) {
         return;
       }
-      if (keyPath[0] == '0') {
+      // 判断数组的首个是否是地址 如果不是则删除
+      if (!/^\//.test(keyPath[0])) {
         keyPath.shift()
       }
-
-
       var aaa = "";
       var lists = this.rightList;
       for (let i = 0; i < lists.length; i++) {

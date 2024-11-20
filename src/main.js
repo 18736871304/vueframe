@@ -40,6 +40,7 @@ axios.interceptors.request.use(config => {
 })
 //前置路由导航守卫
 router.beforeEach((to, from, next) => {
+
   if (to.path == '/login') {
     sessionStorage.removeItem('usermobile');
     return next();

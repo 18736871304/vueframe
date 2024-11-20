@@ -61,6 +61,10 @@ export default {
     onLogin() {
       var that = this;
       this.$refs.pwd.$el.getElementsByTagName("input")[0].blur();
+
+
+
+
       this.logining = true;
       // var loginParams = {
       //   mobile: this.ruleForm2.mobile,
@@ -68,17 +72,24 @@ export default {
       // };
       var loginParams = {
         mobile: "13888888888",
-        password: "E10ADC3949BA59ABBE56E057F20F883E",
-        // passWord: md5("123456").toUpperCase(),
+        // password: "E10ADC3949BA59ABBE56E057F20F883E",
+        password: md5("123456").toUpperCase(),
       };
 
       login(loginParams).then((res) => {
- 
+
         that.logining = false;
         if (res.code == 0) {
-          that.$store.commit( "setusermobile",loginParams.mobile,sessionStorage.setItem('usermobile', loginParams.mobile));
-          that.$store.commit( "setuserpassword ",loginParams.password,sessionStorage.setItem('userpassword', loginParams.password));
+          that.$store.commit("setusermobile", loginParams.mobile,  sessionStorage.setItem('usermobile', loginParams.mobile));
+          sessionStorage.setItem('userToken', res.userToken)
+          sessionStorage.setItem('username', res.username)
           that.AuthMenuList(res.userToken)
+        } else {
+          that.$message({
+            type: "error",
+            duration: 3000,
+            message: res.msg,
+          });
         }
       });
     },

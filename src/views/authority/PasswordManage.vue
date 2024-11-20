@@ -1,23 +1,69 @@
 <template>
-  <div class="PasswordManage"> 密码管理</div>
+  <div class="template">密码管理
+    <div style="border: 1px solid #ccc;">
+        <!-- <Toolbar
+            style="border-bottom: 1px solid #ccc"
+            :editor="editor"
+            :defaultConfig="toolbarConfig"
+            :mode="mode"
+        />
+        <Editor
+            style="height: 500px; overflow-y: hidden;"
+            v-model="html"
+            :defaultConfig="editorConfig"
+            :mode="mode"
+            @onCreated="onCreated"
+        /> -->
+    </div>
+  </div>
 </template>
 
 <script>
 import md5 from "js-md5";
 import FilterItem from "../../components/filterItem.vue";
 import { disComBox, getUserList20, psdUpdate } from "../../api/api";
+
+ 
 export default {
   components: {
     FilterItem,
   },
   data() {
-    return { };
+    return {
+      getsonDatas: {},
+      selectItem: [true, true, true, false, false, false],
+      userName: "",
+      userCode: "",
+      getUserList: [],
+      //添加、修改
+      dig_title: "新增",
+      dialogFormVisible: false,
+      editUserCode: "",
+      editPassWord: "",
+      surePassWord: "",
+      // editMenuGroupValue: "",
+
+      // 分页
+      pageTotal: 0,
+      pageSize: 20,
+      pageNum: 1,
+      tableHeight: 0,
+    };
   },
   created() {
- 
+    // 100是表格外其它布局占的高度，这个数值根据自己实际情况修改   多一行筛选就多加35
+    // this.tableHeight = window.innerHeight - 295;
+    // this.init();
   },
   mounted() {
- 
+    // 设置表格高度
+    // this.tableHeight = window.innerHeight - 295;
+    // // / 监听浏览器窗口变化，动态计算表格高度，
+    // window.onresize = () => {
+    //   return (() => {
+    //     this.tableHeight = window.innerHeight - 295;
+    //   })();
+    // };
   },
   methods: {
     // 初始化
@@ -44,7 +90,6 @@ export default {
         rows: 10,
       };
       getUserList20(reporParams).then((res) => {
-
         this.getUserList = res.rows;
         this.pageTotal = res.total;
         // if (res.code == "1") {
@@ -71,12 +116,13 @@ export default {
         passWord: md5(this.editPassWord).toUpperCase(),
       };
       psdUpdate(reporParams).then((res) => {
-
+     
         // this.organGradeList = res;
       });
     },
 
     handleEdit(item) {
+
       this.edituserCode = item.userCode;
       this.dialogFormVisible = true;
       this.dig_title = "编辑";

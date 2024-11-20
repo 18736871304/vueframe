@@ -24,6 +24,81 @@ export const AuthMenuList = params => {
   return axios.post(`/api/menu/getAuthMenuList`, Qs.stringify(params)).then(res => res.data);
 };
 
+// 获取用户信息
+export const getUserList = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/getUserList`, Qs.stringify(params)).then(res => res.data);
+};
+
+// 新增用户信息
+export const addUser = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/addUser`, Qs.stringify(params)).then(res => res.data);
+};
+
+//修改用户信息
+export const editUser = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/editUser`, Qs.stringify(params)).then(res => res.data);
+};
+
+//删除用户信息
+export const deleteUser = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/deleteUser`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+//获取权限列表
+export const getMenuGroupList = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/getMenuGroupList`, Qs.stringify(params)).then(res => res.data);
+};
+
+//新增权限 
+export const addMenuGroup = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/addMenuGroup`, Qs.stringify(params)).then(res => res.data);
+};
+
+//编辑权限 
+export const editMenuGroup = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/editMenuGroup`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+//删除权限 
+export const deleteMenuGroup = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/deleteMenuGroup`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+// 根据权限查询菜单
+export const getMenuListByMenuGroup = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/getMenuListByMenuGroup`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+//  根据权限关联菜单
+export const createMenuRelation = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/menu/createMenuRelation`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+// 用户权限
+
+export const getUserAuthList = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api//user/getUserAuthList`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+
+
 
 // // 获取菜单
 // export const AuthMenuList = params => {
@@ -115,10 +190,6 @@ export const getTeamList = params => {
 };
 
 
-// 获取员工信息
-export const getUserList = params => {
-  return axios.post(`/authority/getUserList.do`, Qs.stringify(params)).then(res => res.data);
-};
 
 
 // 所属机构
