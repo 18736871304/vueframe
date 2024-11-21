@@ -84,6 +84,7 @@ export default {
           sessionStorage.setItem('userToken', res.userToken)
           sessionStorage.setItem('username', res.username)
           that.AuthMenuList(res.userToken)
+          that.$store.commit("setCollapse", false);
         } else {
           that.$message({
             type: "error",

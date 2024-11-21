@@ -103,6 +103,17 @@ function searchMenu(menuList, path) {
 }
 
 
+
+Vue.directive('removeAriaHidden', {
+  bind(el, binding) {
+    let ariaEls = el.querySelectorAll('.el-radio__original');
+    ariaEls.forEach((item) => {
+      item.removeAttribute('aria-hidden');
+    });
+  }
+});
+
+
 new Vue({
   router,
   store,

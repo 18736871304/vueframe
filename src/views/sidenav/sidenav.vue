@@ -7,7 +7,7 @@
       <div class="grid-content bg-purple-light">
         <!-- 顶部导航 -->
         <div class="guding" :class="isCollapse ? 'collapsed' : 'expanded'">
-          <el-row class="content-tabs  " ref="titleNav" :style="'width:' + gudingWidth + 'px'">
+          <el-row class="content-tabs" ref="titleNav" :style="'width:' + gudingWidth + 'px'" >
             <i v-if="isShow" leftIcon class="el-icon-d-arrow-left scroll" :class="isCollapse ? 'arrow-left' : 'el-icon-d-arrow-left'" @click="toLeft"></i>
 
             <el-button type="primary" v-for="item in editableTabs" :key="item.name" class="tabStyle">
@@ -40,16 +40,16 @@ export default {
   data() {
     return {
       isShow: false,
-      collapsed: false,
-      activeTab: "1", //默认显示的tab
-      tabIndex: 1, //tab目前显示数
-      editableTabsValue: "",
+      // collapsed: false,
+      // activeTab: "1", //默认显示的tab
+      // tabIndex: 1, //tab目前显示数
+      // editableTabsValue: "",
       editableTabs: [{ content: "/home", name: "0", title: "首页" }],
       lists: [],
-      rouStyle: "",
+      // rouStyle: "",
       routeTitle: "", //当前路由
       gudingWidth: "",
-      scrollLeftNum: "", //当前点击的路由前面有几个
+      // scrollLeftNum: "", //当前点击的路由前面有几个
     };
   },
 
@@ -61,7 +61,7 @@ export default {
   }),
   watch: {
     editableTabs: {
-      handler(  newVal, oldVal) {
+      handler(newVal, oldVal) {
         if (newVal.length == 0) {
           this.$router.push("/home");
         }
@@ -70,7 +70,6 @@ export default {
 
     $route: {
       handler: function (route, aa) {
-        console.log(route)
         this.routeTitle = route.name;
         this.cejv();
       },
@@ -79,7 +78,7 @@ export default {
 
     isCollapse: {
       handler(newVal, oldVal) {
-
+        console.log(newVal, oldVal)
         this.cejv();
       },
     },
@@ -128,23 +127,29 @@ export default {
 
     //添加面包屑  子父传值， 父元素在这里接受子元素传递过来的值
     childByValue(data, e) {
+      console.log(data)
       var that = this;
       var tabs = this.editableTabs;
       if (tabs.length != 0) {
+        console.log(tabs)
         for (let i = 0; i < tabs.length; i++) {
-          if (tabs[i].content == data[1] || tabs[i].content == data[0]) {
-            this.scrollLeftNum = tabs[i].name;
+          if ( tabs[i].content == data[0]) {
+            // this.scrollLeftNum = tabs[i].name;
             return;
           }
         }
       }
+
+
+
       this.editableTabs.push({
         title: data[1],
         name: this.editableTabs.length,
         content: data[0],
       });
+
       // this.$refs.titleNav.$el.scrollLeft=6000
-      this.scrollLeftNum = this.editableTabs.length;
+      // this.scrollLeftNum = this.editableTabs.length;
     },
 
     //移除tabs

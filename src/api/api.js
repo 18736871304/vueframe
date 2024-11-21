@@ -97,6 +97,35 @@ export const getUserAuthList = params => {
 };
 
 
+// 用户绑定菜单权限
+export const addUserAuth = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/addUserAuth`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+// 用户解绑菜单权限
+export const deleteUserAuth = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/user/deleteUserAuth`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

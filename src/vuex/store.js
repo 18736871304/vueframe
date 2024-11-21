@@ -12,7 +12,7 @@ const state = {
     rightList: sessionStorage.getItem('rightList') || [],
     username: sessionStorage.getItem('username') || '',
     isCollapse: false,
-    activeRouter: '', //当前路由
+    // activeRouter: '', //当前路由
 }
 
 // 定义所需的 mutations
@@ -42,9 +42,9 @@ const mutations = {
     },
 
 
-    setActiveIndex(state, value) {
-        state.activeRouter = value
-    },
+    // setActiveIndex(state, value) {
+    //     state.activeRouter = value
+    // },
 
     INCREMENT(state) {
         state.count++

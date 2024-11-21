@@ -127,35 +127,33 @@ export default {
 
       this.$confirm("确认退出吗?", "提示", {
         type: "warning",
-      })
-        .then(() => {
-          sessionStorage.removeItem("userCode");
+      }).then(() => {
+        sessionStorage.removeItem("userCode");
+        that.$router.push("/login");
+        var reporParams = {
+          userToken: sessionStorage.getItem("userToken"),
+        };
+        logout(reporParams).then((res) => {
+          sessionStorage.removeItem("rightList");
+          sessionStorage.removeItem("userToken");
+          sessionStorage.removeItem("username");
+          sessionStorage.removeItem("usermobile");
           that.$router.push("/login");
-          var reporParams = {
-            userToken: sessionStorage.getItem("userToken"),
-          };
-          logout(reporParams).then((res) => {
-            sessionStorage.removeItem("rightList");
-            sessionStorage.removeItem("userToken");
-            sessionStorage.removeItem("username");
-            sessionStorage.removeItem("usermobile");
-            that.$router.push("/login");
-            // if (res.code == "0") {
-            //   sessionStorage.removeItem("rightList");
-            //   sessionStorage.removeItem("token");
-            //   sessionStorage.removeItem("username");
-            //   that.$router.push("/login");
-            // } else {
-            //   // that.$message({
-            //   //   type: "error",
-            //   //   duration: 3000,
-            //   //   message: "退出登录失败",
-            //   // });
-            //   that.$router.push("/login");
-            // }
-          });
-        })
-        .catch(() => { });
+          // if (res.code == "0") {
+          //   sessionStorage.removeItem("rightList");
+          //   sessionStorage.removeItem("token");
+          //   sessionStorage.removeItem("username");
+          //   that.$router.push("/login");
+          // } else {
+          //   // that.$message({
+          //   //   type: "error",
+          //   //   duration: 3000,
+          //   //   message: "退出登录失败",
+          //   // });
+          //   that.$router.push("/login");
+          // }
+        });
+      }).catch(() => { });
     },
     // 全屏
     requestFullScreen() {

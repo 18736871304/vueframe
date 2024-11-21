@@ -7,7 +7,7 @@
         <el-submenu :key="index" :index="index + ''" style="text-align: left;  " v-if="item.childmenu.length>0">
           <template slot="title">
             <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-            <span slot="title">{{ item.menuname }} {{  index}}</span>
+            <span slot="title">{{ item.menuname }}</span>
           </template>
 
           <el-menu-item class="child" v-for="(child, index) in item.childmenu" :index="child.path" :key="index">{{ child.menuname  }}</el-menu-item>
@@ -59,6 +59,11 @@ export default {
         // this.handleopen(newVal);
       },
     },
+    isCollapse:{
+      handler(newVal, oldVal) {
+         console.log(newVal, oldVal)
+      },
+    }
   },
 
   created() {
@@ -95,16 +100,14 @@ export default {
           }
         }
       }
-
-
-
-
-
+     
       keyPath.push(aaa);
       // childByValue是在父组件on监听的方法
       // 子父传值
       // 第二个参数this.childValue是需要传的值
       this.$emit("childByValue", keyPath);
+
+     
     },
   },
 };

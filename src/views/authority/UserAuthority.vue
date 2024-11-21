@@ -20,9 +20,8 @@
 
     <div class="table_list">
       <!-- <el-table :data="UserAuthList" :header-cell-style="{ background: '#f8f8f9', color: '#606266' }" highlight-current-row @current-change="handleCurrentChange" style="width: 100%;"> -->
-        <el-table :data="UserAuthList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row    @current-change="handleCurrentChange">
+      <el-table :data="UserAuthList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row @current-change="handleCurrentChange">
 
-        
         <el-table-column type="index" width="40" align="center"></el-table-column>
         <el-table-column prop="makedatestr" label="最后一次操作时间" width="190" align="center" sortable></el-table-column>
         <el-table-column prop="realname" label="用户姓名" width="130" align="center"></el-table-column>
@@ -32,8 +31,8 @@
 
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
-            <el-button size="small" @click="handleEdit(scope.row)">新增菜单</el-button>
-            <el-button type="danger" size="small" @click="handleDel(scope.row)">删除</el-button>
+            <el-button size="small" @click="handleEdit(scope.row)">绑定菜单</el-button>
+            <el-button type="danger" size="small" @click="handleDel(scope.row)">删除菜单</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -43,7 +42,7 @@
     </div>
 
     <el-dialog title="新增菜单" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <el-radio-group v-model="checked">
+      <el-radio-group v-model="checked" v-removeAriaHidden>
         <el-radio border v-for="item in menuList" :label="item.menugroupserialno" :key="item.menugroupserialno">{{ item.menugroupname }}</el-radio>
       </el-radio-group>
 
@@ -56,7 +55,7 @@
 </template>
 
 <script>
-import { getUserAuthList,getMenuGroupList } from "../../api/api";
+import { getUserAuthList, getMenuGroupList, addUserAuth, deleteUserAuth } from "../../api/api";
 export default {
   data() {
     return {
@@ -75,7 +74,8 @@ export default {
       pageNum: 1,
 
       menuList: [],
-      checked: "000000001",
+      checked: "",
+      radio3: '',
       // isIndeterminate: true,
       currentRow: null,
     };
@@ -129,14 +129,15 @@ export default {
       });
     },
 
-    // 确认新增菜单组
+    // 确认绑定菜单组
     sureAdd() {
       var that = this;
       var reporParams = {
-        userToken: sessionStorage.getItem("token"),
         menugroupserialno: this.checked,
         userid: this.userid,
       };
+
+
       addUserAuth(reporParams).then((res) => {
         if (res.code == "0") {
           that.$message({
@@ -159,19 +160,27 @@ export default {
 
     //打开修改
     handleEdit(item) {
-      this.dialogFormVisible = true;
-      this.userid = item.userserialno;
-      this.menugroupserialno = item.authserialno;
-      this.checked = item.authserialno;
+      if (item.menugroupname && item.menugroupname != '') {
+        this.$message({
+          type: "info",
+          duration: 3000,
+          message: "请删除菜单组之后重新添加",
+        });
+      } else {
+        this.dialogFormVisible = true;
+        this.userid = item.userserialno;
+        this.menugroupserialno = item.authserialno;
+      }
+
+
     },
-    // 删除
+    // 删除用户的菜单组
     handleDel(item) {
       var that = this;
       this.$confirm("确认删除吗?", "提示", {
         type: "warning",
       }).then(() => {
         var reporParams = {
-          userToken: sessionStorage.getItem("token"),
           authserialno: item.authserialno,
         };
         deleteUserAuth(reporParams).then((res) => {
@@ -190,7 +199,12 @@ export default {
             });
           }
         });
-      });
+      }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     pageClick(page) {
       //点击分页

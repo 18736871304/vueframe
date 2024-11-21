@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { getUserList, addUser, editUser,deleteUser } from "../../api/api";
+import { getUserList, addUser, editUser, deleteUser } from "../../api/api";
 export default {
   data() {
     return {
@@ -182,6 +182,11 @@ export default {
               message: "删除失败",
             });
           }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
       });
     },
