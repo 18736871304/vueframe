@@ -111,8 +111,47 @@ export const deleteUserAuth = params => {
 };
 
 
+// 内容查询列表
+export const getContentList = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/getContentList`, Qs.stringify(params)).then(res => res.data);
+};
+// 根据ID查询文章具体内容
+export const getOneContent = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/getOneContent`, Qs.stringify(params)).then(res => res.data);
+};
+
+// 内容录入
+export const contentInsert = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/contentInsert`, Qs.stringify(params)).then(res => res.data);
+};
 
 
+// 图片上传
+export const uploadImg = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/uploadImg`, Qs.stringify(params)).then(res => res.data);
+};
+
+// 内容修改
+export const contentUpdate = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/contentUpdate`, Qs.stringify(params)).then(res => res.data);
+};
+
+
+// 内容删除
+export const contentDelete = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/contentDelete`, Qs.stringify(params)).then(res => res.data);
+};
+// 内容审核
+export const contentExam = params => {
+  params["userToken"]=sessionStorage.getItem('userToken')
+  return axios.post(`/api/content/contentExam`, Qs.stringify(params)).then(res => res.data);
+};
 
 
 

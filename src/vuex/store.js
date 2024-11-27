@@ -34,6 +34,8 @@ const mutations = {
 
     // 折叠按钮
     setCollapse(state, data) {
+
+        console.log('这是这贴按钮')
         state.isCollapse = data
     },
     // 保存后台返回菜单

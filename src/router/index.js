@@ -67,6 +67,11 @@ var routes = [{
         name: '内容审核'
       },
 
+      {
+        path: '/ContentQuery',
+        component: () => import("@/views/contentManagement/ContentQuery.vue"),
+        name: '内容查询'
+      },
 
 
 

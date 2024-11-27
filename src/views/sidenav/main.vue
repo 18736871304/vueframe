@@ -7,7 +7,7 @@
         <el-submenu :key="index" :index="index + ''" style="text-align: left;  " v-if="item.childmenu.length>0">
           <template slot="title">
             <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-            <span slot="title">{{ item.menuname }}</span>
+            <span slot="title">{{ item.menuname }}{{ index }}</span>
           </template>
 
           <el-menu-item class="child" v-for="(child, index) in item.childmenu" :index="child.path" :key="index">{{ child.menuname  }}</el-menu-item>
@@ -15,7 +15,7 @@
         <!-- 预防一级菜单有内容  item.leaf && item.child.length > 0-->
         <el-menu-item :key="item.index" v-else :index="item.path" style="text-align: left; ">
           <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-          <span slot="title">{{ item.menuname }} </span>
+          <span slot="title">{{ item.menuname }}{{ index }} </span>
         </el-menu-item>
       </template>
     </el-menu>
@@ -28,8 +28,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      activeTab: "1", //默认显示的tab
-      tabIndex: 1, //tab目前显示数
+    
       // isCollapse: false,
       // rightList: [],
     
@@ -42,25 +41,31 @@ export default {
 
     ...mapState(["activeRouter"]),
     rightList() {
+      console.log("1231")
       return eval("(" + this.$store.state.rightList + ")"); //用computed接收
+     
     },
-    defaultActive() {
-      return this.$router.path;
-    },
-    activeNav() {
-      //当前激活的导航
-      return this.$route.path;
-    },
+    // defaultActive() {
+    //   console.log("1231")
+    //   return this.$router.path;
+    // },
+    // activeNav() {
+    //   console.log("1231")
+    //   //当前激活的导航
+    //   return this.$route.path;
+    // },
   }),
 
   watch: {
     activeRouter: {
       handler(newVal, oldVal) {
+        console.log("1231")
         // this.handleopen(newVal);
       },
     },
     isCollapse:{
       handler(newVal, oldVal) {
+        console.log("1231")
          console.log(newVal, oldVal)
       },
     }
@@ -77,12 +82,13 @@ export default {
     handleclose() { },
 
     handleselect(key, keyPath) {
+      console.log(key, keyPath)
       if (key == null) {
         return;
       }
       // 判断数组的首个是否是地址 如果不是则删除
-      if (!/^\//.test(keyPath[0])) {
-        keyPath.shift()
+      if (/^\//.test(keyPath[0])) {
+        keyPath.push('')
       }
       var aaa = "";
       var lists = this.rightList;
@@ -90,24 +96,23 @@ export default {
         if (lists[i].childmenu && lists[i].childmenu.length > 0) {
           var bbb = lists[i].childmenu;
           for (let j = 0; j < bbb.length; j++) {
-            if (keyPath[1] == bbb[j].path || keyPath[0] == bbb[j].path) {
+            if (keyPath[2] == bbb[j].path || keyPath[1] == bbb[j].path) {
               aaa = bbb[j].menuname;
             }
           }
         } else {
-          if (keyPath[1] == lists[i].path || keyPath[0] == lists[i].path) {
+          if (keyPath[2] == lists[i].path || keyPath[1] == lists[i].path) {
             aaa = lists[i].menuname;
           }
         }
       }
-     
+
       keyPath.push(aaa);
       // childByValue是在父组件on监听的方法
       // 子父传值
       // 第二个参数this.childValue是需要传的值
       this.$emit("childByValue", keyPath);
-
-     
+      
     },
   },
 };

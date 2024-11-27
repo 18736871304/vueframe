@@ -7,7 +7,7 @@
       <div class="grid-content bg-purple-light">
         <!-- 顶部导航 -->
         <div class="guding" :class="isCollapse ? 'collapsed' : 'expanded'">
-          <el-row class="content-tabs" ref="titleNav" :style="'width:' + gudingWidth + 'px'" >
+          <el-row class="content-tabs" ref="titleNav" :style="'width:' + gudingWidth + 'px'">
             <i v-if="isShow" leftIcon class="el-icon-d-arrow-left scroll" :class="isCollapse ? 'arrow-left' : 'el-icon-d-arrow-left'" @click="toLeft"></i>
 
             <el-button type="primary" v-for="item in editableTabs" :key="item.name" class="tabStyle">
@@ -41,10 +41,9 @@ export default {
     return {
       isShow: false,
       // collapsed: false,
-      // activeTab: "1", //默认显示的tab
-      // tabIndex: 1, //tab目前显示数
+
       // editableTabsValue: "",
-      editableTabs: [{ content: "/home", name: "0", title: "首页" }],
+      editableTabs: [{ content: "/home", name: "0", title: "首页" ,index:''}],
       lists: [],
       // rouStyle: "",
       routeTitle: "", //当前路由
@@ -70,8 +69,11 @@ export default {
 
     $route: {
       handler: function (route, aa) {
+      
         this.routeTitle = route.name;
         this.cejv();
+
+     
       },
       immediate: true,
     },
@@ -85,9 +87,6 @@ export default {
   },
 
   methods: {
-    handleopen() { },
-    handleclose() { },
-    handleselect: function () { },
     toLeft() {
       this.move("left");
     },
@@ -133,20 +132,21 @@ export default {
       if (tabs.length != 0) {
         console.log(tabs)
         for (let i = 0; i < tabs.length; i++) {
-          if ( tabs[i].content == data[0]) {
+          if (tabs[i].content == data[1]) {
             // this.scrollLeftNum = tabs[i].name;
             return;
           }
         }
       }
 
-
-
       this.editableTabs.push({
-        title: data[1],
+        title: data[2],
         name: this.editableTabs.length,
-        content: data[0],
+        content: data[1],
+        index:data[0]
       });
+
+
 
       // this.$refs.titleNav.$el.scrollLeft=6000
       // this.scrollLeftNum = this.editableTabs.length;
@@ -170,35 +170,6 @@ export default {
 </script>
 
 <style scoped>
-/* .hengxian {
-  height: 13px;
-  width: 100%;
-  background: #e3e9ed;
-  margin-top: 55px;
-  z-index: 99;
-  position: fixed;
-  top: 50px;
-}
-.breadcrumb-container {
-  width: 100%;
-  height: 50px;
-  box-sizing: border-box;
-  padding-left: 30px;
-  background-color: #fff;
-  border-bottom: 1px solid #efefef;
-}
-
-.title {
-  width: 200px;
-  float: left;
-}
-
-.breadcrumb-inner {
-  float: left !important;
-  font-size: 21px;
-  line-height: 50px;
-} */
-
 .content-wrapper {
   background-color: #fff;
   box-sizing: border-box;

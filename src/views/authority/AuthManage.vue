@@ -17,10 +17,7 @@
 
     <div class="table_list">
       <!-- <el-table :data="MenuGroupList" :header-cell-style="{ background: '#f8f8f9', color: '#606266' }" highlight-current-row  style="width: 100%;"> -->
-        <el-table :data="MenuGroupList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row    @current-change="handleCurrentChange">
-
-
-
+      <el-table :data="MenuGroupList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row @current-change="handleCurrentChange">
 
         <el-table-column type="index" width="40" align="center"></el-table-column>
         <el-table-column prop="makedatestr" label="最后一次操作时间" width="190" align="center" sortable></el-table-column>
@@ -58,7 +55,7 @@
 </template>
 
 <script>
-import { getMenuGroupList,addMenuGroup,editMenuGroup,deleteMenuGroup ,getMenuListByMenuGroup,createMenuRelation} from "../../api/api";
+import { getMenuGroupList, addMenuGroup, editMenuGroup, deleteMenuGroup, getMenuListByMenuGroup, createMenuRelation } from "../../api/api";
 export default {
   data() {
     return {
@@ -138,7 +135,7 @@ export default {
         });
       } else {
         var reporParams = {
-  
+
           menugroupname: this.inputMenu,
           menugroupserialno: this.menugroupserialno,
         };
@@ -177,7 +174,7 @@ export default {
         type: "warning",
       }).then(() => {
         var reporParams = {
-           menugroupserialno: item.menugroupserialno,
+          menugroupserialno: item.menugroupserialno,
         };
         deleteMenuGroup(reporParams).then((res) => {
           if (res.code == "0") {
@@ -196,11 +193,11 @@ export default {
           }
         });
       }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
+      });
     },
     pageClick(page) {
       //点击分页
@@ -235,7 +232,7 @@ export default {
       } else {
         this.menugroupserialno = item.menugroupserialno;
         var reporParams = {
-        
+
           menugroupserialno: item.menugroupserialno,
         };
         getMenuListByMenuGroup(reporParams).then((res) => {
@@ -268,7 +265,7 @@ export default {
     getCheckedKeys() {
       var that = this;
       var reporParams = {
-       
+
         menugroupserialno: this.menugroupserialno,
         menuRelaTionStr: this.$refs.rolestree.getCheckedKeys().toString(),
       };
@@ -305,7 +302,8 @@ export default {
 /* 这是筛选项的内容 */
 .common_hang {
   display: flex;
-  width: 350px;
+  width: 310px;
+  margin-right: 30px;
 }
 .common_hang .mech {
   width: 100px;

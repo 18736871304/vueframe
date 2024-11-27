@@ -15,10 +15,7 @@
     </div>
 
     <div class="table_list">
-      <!-- <el-table :data="userList" :header-cell-style="{ background: '#f8f8f9', color: '#606266' }" highlight-current-row style="width: 100%;"> -->
-
       <el-table :data="userList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row style="width: 100%;">
-
         <el-table-column type="index" width="40" align="center"></el-table-column>
         <el-table-column prop="makedatestr" label="生成日期" width="240" align="center" sortable></el-table-column>
         <el-table-column prop="realname" label="姓名" width="130" align="center"></el-table-column>
@@ -102,7 +99,7 @@ export default {
       var that = this;
       if (this.userid == "") {
         var reporParams = {
-          userToken: sessionStorage.getItem("token"),
+          // userToken: sessionStorage.getItem("token"),
           mobile: this.inputMobile,
           name: this.inputName,
         };
@@ -219,11 +216,13 @@ export default {
 };
 </script>
 
-<style>
+<style   scoped>
+ 
 /* 这是筛选项的内容 */
 .common_hang {
   display: flex;
-  width: 350px;
+  width: 310px;
+  margin-right: 30px;
 }
 .common_hang .mech {
   width: 100px;

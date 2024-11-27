@@ -239,8 +239,10 @@ export default {
 <style css-scoped>
 /* 这是筛选项的内容 */
 .common_hang {
-  display: flex;
-  width: 350px;
+  display: flex
+;
+    width: 310px;
+    margin-right: 30px;
 }
 .common_hang .mech {
   width: 100px;
