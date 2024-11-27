@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmeihua"]=self["webpackChunkmeihua"]||[]).push([[598],{29598:(s,t,a)=>{a.r(t),a.d(t,{default:()=>r});var e=function(){var s=this,t=s._self._c;return t("img",{staticClass:"img-404",attrs:{src:a(96682),alt:""}})},l=[],u=a(81656),i={},n=(0,u.A)(i,e,l,!1,null,null,null);const r=n.exports},96682:(s,t,a)=>{s.exports=a.p+"static/img/404.b1fa4abd.png"}}]);
+//# sourceMappingURL=598.5fdf8936.js.map
