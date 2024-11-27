@@ -7,7 +7,7 @@
         <el-submenu :key="index" :index="index + ''" style="text-align: left;  " v-if="item.childmenu.length>0">
           <template slot="title">
             <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-            <span slot="title">{{ item.menuname }}{{ index }}</span>
+            <span slot="title">{{ item.menuname }}</span>
           </template>
 
           <el-menu-item class="child" v-for="(child, index) in item.childmenu" :index="child.path" :key="index">{{ child.menuname  }}</el-menu-item>
@@ -15,7 +15,7 @@
         <!-- 预防一级菜单有内容  item.leaf && item.child.length > 0-->
         <el-menu-item :key="item.index" v-else :index="item.path" style="text-align: left; ">
           <i :class="item.icon" class="el-icon-message" style="margin-right:5px; "></i>
-          <span slot="title">{{ item.menuname }}{{ index }} </span>
+          <span slot="title">{{ item.menuname }}</span>
         </el-menu-item>
       </template>
     </el-menu>
@@ -41,16 +41,13 @@ export default {
 
     ...mapState(["activeRouter"]),
     rightList() {
-      console.log("1231")
       return eval("(" + this.$store.state.rightList + ")"); //用computed接收
      
     },
     // defaultActive() {
-    //   console.log("1231")
     //   return this.$router.path;
     // },
     // activeNav() {
-    //   console.log("1231")
     //   //当前激活的导航
     //   return this.$route.path;
     // },
@@ -59,14 +56,11 @@ export default {
   watch: {
     activeRouter: {
       handler(newVal, oldVal) {
-        console.log("1231")
         // this.handleopen(newVal);
       },
     },
     isCollapse:{
       handler(newVal, oldVal) {
-        console.log("1231")
-         console.log(newVal, oldVal)
       },
     }
   },
@@ -82,7 +76,6 @@ export default {
     handleclose() { },
 
     handleselect(key, keyPath) {
-      console.log(key, keyPath)
       if (key == null) {
         return;
       }

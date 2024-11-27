@@ -12,6 +12,11 @@
         <el-input v-model="title" placeholder="请输入标题" clearable></el-input>
       </div>
 
+      <div class="common_hang">
+        <div class="mech">简介</div>
+        <el-input v-model="info" placeholder="请输入标题" clearable></el-input>
+      </div>
+
       <el-button type="primary" @click="getContentList(1)">查询</el-button>
       <el-button type="primary" @click="addUser">新增</el-button>
     </div>
@@ -23,7 +28,7 @@
         <el-table-column prop="oprname" label="发布人" width="130" align="center"></el-table-column>
         <el-table-column prop="title" label="标题" width="380" align="center"></el-table-column>
         <el-table-column prop="info" label="简介" width="280" align="center"></el-table-column>
-
+        <el-table-column prop="head_pic_url" label="封面图" width="280" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="auto">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
@@ -112,6 +117,7 @@ export default {
 
       contentList: [],
       title: '',
+      info: '',
       searchDate: '',
 
       digTitle: '',
@@ -218,7 +224,6 @@ export default {
         };
 
         axios(config).then(function (res) {
-          console.log(res)
           let url = res.data.imgPath; //拼接成可浏览的图片地址
           // let url = "http://8.133.195.79/api/content/uploadImg/" + res.data.data.path; //拼接成可浏览的图片地址
           insertFn(url, "图片", url); //插入图片
@@ -229,7 +234,9 @@ export default {
       }
     };
   },
-  mounted() { },
+  mounted() {
+    this.getContentList("1")
+  },
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
@@ -238,15 +245,14 @@ export default {
     getContentList(page) {
       var that = this;
       var reporParams = {
-        mobile: this.mobile,
-        name: this.name,
-        usertype: '02',
+        title: this.title,
+        info: this.info,
+        state: '01',
         pageNumber: page,
         pageSize: this.pageSize,
       };
 
       getContentList(reporParams).then((res) => {
-        console.log(res)
         if (res.code == "1") {
           that.$message({
             type: "error",
@@ -270,12 +276,12 @@ export default {
       var that = this
       this.digTitle = item.title
       this.digInfo = item.info
-      this.fileList.push({ imgPath: 'https://www.un29.com/articleImg/04.jpg' })
+      this.fileList.push({ imgPath: item.head_pic_url })
       var reporParams = {
         id: item.id
       };
       getOneContent(reporParams).then((res) => {
-        console.log(res)
+
         that.html = res.content
         that.id = res.id
 
@@ -286,6 +292,17 @@ export default {
     // 确认新增或修改
     sureAdd() {
       var that = this;
+
+      console.log(that.fileList)
+      if (that.fileList.length==0) {
+        that.$message({
+          type: "error",
+          duration: 3000,
+          message: "请添加文章封面图",
+        });
+        return
+      }
+
       if (this.id == "") {
         var reporParams = {
           title: this.digTitle,
@@ -346,7 +363,6 @@ export default {
         type: "warning",
       }).then(() => {
         var reporParams = {
-
           id: item.userserialno,
         };
         contentDelete(reporParams).then((res) => {
@@ -432,8 +448,8 @@ export default {
         var data = JSON.parse(res);
         if (data.code == "0") {
           that.fileList = []
-          // that.fileList.push({ imgPath: data.imgPath })
-          that.fileList.push({ imgPath: "https://www.un29.com/articleImg/04.jpg" })
+          that.fileList.push({ imgPath: data.imgPath })
+          // that.fileList.push({ imgPath: "https://www.un29.com/articleImg/04.jpg" })
           that.$message({
             type: "success",
             duration: 2000,

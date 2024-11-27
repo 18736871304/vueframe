@@ -1,172 +1,174 @@
 <template>
-  <div>
-    <div class="rich-text-editor" ref="richTextEditorRef">
-      <!-- 菜单栏 -->
-      <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
 
-      <!-- 编辑器 -->
-      <Editor style="height: 400px; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" @onChange="onChange" />
+  <div class="template">
+    <div class="search">
+      <div class="common_hang common_date">
+        <div class="mech">修改时间</div>
+        <el-date-picker v-model="searchDate" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+        </el-date-picker>
+      </div>
+      <div class="common_hang">
+        <div class="mech">标题</div>
+        <el-input v-model="title" placeholder="请输入标题" clearable></el-input>
+      </div>
+      <div class="common_hang">
+        <div class="mech">简介</div>
+        <el-input v-model="info" placeholder="请输入标题" clearable></el-input>
+      </div>
+
+      <el-button type="primary" @click="getContentList(1)">查询</el-button>
+
+    </div>
+
+    <div class="table_list">
+      <el-table :data="contentList" :stripe="true" border :row-style="{ height: '50px' }" :header-cell-style="{ background: '#f3f6fd',  color: '#555', height: '50px', }" highlight-current-row style="width: 100%;">
+        <el-table-column type="index" width="40" align="center"></el-table-column>
+        <el-table-column prop="modifydatestr" label="最后修改时间" width="240" align="center" sortable></el-table-column>
+        <el-table-column prop="oprname" label="发布人" width="130" align="center"></el-table-column>
+        <el-table-column prop="title" label="标题" width="380" align="center"></el-table-column>
+        <el-table-column prop="info" label="简介" width="280" align="center"></el-table-column>
+        <el-table-column prop="head_pic_url" label="封面图" width="280" align="center"></el-table-column>
+
+        <el-table-column label="操作" align="center" width="auto">
+          <template slot-scope="scope">
+
+            <el-button type="primary" size="small" @click="handleExam(scope.row)">审核</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination background @current-change="pageClick" :page-size="pageSize" :current-page="pageNum" layout="total, prev, pager, next" :total="pageTotal" class="indexPage">
+      </el-pagination>
+
     </div>
   </div>
+
 </template>
 <script>
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+
+import { getContentList, contentExam } from "../../api/api";
+
 export default {
-  name: "RichTextEditor",
-  components: { Editor, Toolbar },
   data() {
     return {
-      // 真正的编辑器里的内容
-      editorContent: "",
-      editor: null,
-      html: "", // 富文本内容
-      isDisabled: false,// 控制富文本是否能够编辑
-      toolbarConfig: { // 工具栏配置
-        excludeKeys: [
-          // 隐藏全屏按钮
-          "fullScreen"
-        ]
+      contentList: [],
+      title: '',
+      info:'',
+      searchDate: '',
+      // 分页
+      pageTotal: 0,
+      pageSize: 10,
+      pageNum: 1,
+
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
       },
-      editorConfig: { // 编辑器配置
-        placeholder: "请输入内容...",
-        showFullScreen: "false",
-        disable: false,
-        MENU_CONF: {
-          uploadImage: { // 图片上传配置
-            fieldName: "myFile", // 上传图片名字
-            server: 'https://crm.meihualife.com//crm/fileupload/impUpload.do',
-            meta: {
-              // buztype: "0103",
-              // buzid: ""
-            },
-            metaWithUrl: true, // join params to url
-            headers: { Accept: 'text/x-json' },
-            maxFileSize: 10 * 1024 * 1024, // 10M
-            onBeforeUpload(file) {
-              console.log('onBeforeUpload', file)
-              return file // will upload this file
-              // return false // prevent upload
-            },
-            onProgress(progress) {
-              console.log('onProgress', progress)
-            },
-            onSuccess(file, res) {
-              console.log('onSuccess', file, res)
-              console.log(res.data[0])
-            },
-            onFailed(file, res) {
-              alert(res.message)
-              console.log('onFailed', file, res)
-            },
-            onError(file, err, res) {
-              alert(err.message)
-              console.error('onError', file, err, res)
-            },
-            // 自定义插入图片
-            customInsert(res, insertFn) {  // TS 语法
-              // 从 res 中找到 url alt href ，然后插入图片
-              insertFn(res.data[0], '美华保险', res.data[0])
-            },
-          },
-        }
-      },
-      mode: "default", // or 'simple'控制工具栏模式为简洁或者默认
-    }
+
+
+
+    };
   },
-  watch: {
-
-  },
-  mounted: function () {
-
-
+  created() { },
+  mounted() {
+    this.getContentList("1")
   },
   methods: {
-
-
-    onChange(editor) {
-      document.onkeydown = function (event) {
-        let e = event || window.event;
-        if (e.code == "Enter") {
-          editor.insertBreak();
-        }
+    getContentList(page) {
+      var that = this;
+      var reporParams = {
+        title: this.title,
+        info: this.info,
+        state: '01',
+        pageNumber: page,
+        pageSize: this.pageSize,
       };
+
+      getContentList(reporParams).then((res) => {
+        if (res.code == "1") {
+          that.$message({
+            type: "error",
+            duration: 3000,
+            message: res.msg,
+          });
+        } else {
+          this.contentList = res.rows;
+          this.pageTotal = res.total;
+        }
+      });
+
+
+    },
+    handleExam(item) {
+      var that = this;
+      this.$confirm("是否审核通过?", "提示", {
+        type: "warning",
+      }).then(() => {
+        var reporParams = {
+          id: item.id,
+        };
+        contentExam(reporParams).then((res) => {
+          if (res.code == "0") {
+            that.$message({
+              type: "success",
+              duration: 3000,
+              message: "通过审核",
+            });
+            that.getContentList(1);
+          } else {
+            that.$message({
+              type: "error",
+              duration: 3000,
+              message: "没有通过审核，审核失败",
+            });
+          }
+        });
+      })
     },
 
-    onCreated(editor) {
-      this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
-      if (this.isDisabled) {
-        this.editor.disable();
-      } else {
-        this.editor.enable();
-      }
-    },
 
-    onChange(editor) {
-      console.log(this.html)
-      this.$emit("向父组件传值", this.html);
-    },
-    beforeDestroy() {
-      const editor = this.editor;
-      if (editor == null) return;
-      editor.destroy(); // 组件销毁时，及时销毁编辑器
+
+    pageClick(page) {
+      //点击分页
+      this.pageNum = page;
+      this.getContentList(page);
     },
 
 
 
 
-    // 上传文件
-    // tirggerFile(e) {
-    //   var _this = this
-    //   this.updateCJGitem('isUpload').then(res => {
-    //     let buztype, buzid
-    //     buzid = res.id
-    //     buztype = '0103'
-    //     // let baseid = res.baseid
-    //     let formData = new FormData();
-    //     formData.append('myFile', e.target.files[0]);
-    //     // formData.append('secondbuzid', res.baseid);
-    //     formData.append('buztype', buztype);
-    //     formData.append('buzid', buzid);
-    //     let that = this
-    //     $.ajax({
-    //       url: my_url + '/crm/fileupload/fileUpload.do',
-    //       type: 'POST',
-    //       cache: false,
-    //       data: formData,
-    //       processData: false,
-    //       contentType: false
-    //     }).done(function (res) {
-    //       var ss = JSON.parse(res)
-    //       console.log(ss)
-    //       if (ss.code == "1") {
-    //         _this.$message({
-    //           showClose: true,
-    //           message: ss.msg,
-    //           duration: 3000,
-    //           type: 'error'
-    //         });
-    //       }
-    //       $('.file-input').val('')
-    //       // that.getUploadFile(baseid)
-    //     }).fail(function (res) {
-    //       console.log(res)
-    //     });
-    //   }).catch(res => {
-    //     console.log(res)
-    //   })
-    // },
+  },
 
-
-
-
-
-
-
-  }
-}
+};
 </script>
 <style src="@wangeditor/editor/dist/css/style.css"></style>
-<style scoped>
+ 
+
+
+<style  scoped>
 .rich-text-editor {
   width: 100%;
   height: 100%;
@@ -176,15 +178,61 @@ export default {
   padding: 0rem;
   overflow: auto;
 }
+
+/* 这是筛选项的内容 */
+.common_hang {
+  display: flex;
+  width: 310px;
+  margin-right: 30px;
+}
+.common_date {
+  width: 350px;
+}
+.common_date .el-date-editor {
+  width: 250px;
+}
+.common_hang .mech {
+  width: 100px;
+  height: 35px;
+  line-height: 35px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #909399;
+}
+.common_hang .el-input {
+  width: 210px;
+}
+.common_hang .el-input .el-input__inner {
+  width: 210px;
+  border-radius: 0;
+  height: 35px;
+}
+.common_hang .el-select .el-input {
+  width: 210px;
+}
+.search {
+  /* margin-top: 20px; */
+  display: flex;
+  padding: 0px 10px 10px;
+}
 </style>
 
 <style>
 .rich-text-editor .w-e-text-container p {
   text-align: left;
- 
 }
 
 .rich-text-editor .w-e-text-placeholder {
   text-align: left;
+  height: 21px;
+  line-height: 21px;
+}
+
+.contentManage .el-form-item__label {
+  width: 60px;
+  text-align: justify;
+}
+.contentManage .el-form-item__content {
+  width: 100%;
 }
 </style>

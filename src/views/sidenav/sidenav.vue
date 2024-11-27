@@ -80,7 +80,6 @@ export default {
 
     isCollapse: {
       handler(newVal, oldVal) {
-        console.log(newVal, oldVal)
         this.cejv();
       },
     },
@@ -126,11 +125,9 @@ export default {
 
     //添加面包屑  子父传值， 父元素在这里接受子元素传递过来的值
     childByValue(data, e) {
-      console.log(data)
       var that = this;
       var tabs = this.editableTabs;
       if (tabs.length != 0) {
-        console.log(tabs)
         for (let i = 0; i < tabs.length; i++) {
           if (tabs[i].content == data[1]) {
             // this.scrollLeftNum = tabs[i].name;
