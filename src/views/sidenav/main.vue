@@ -81,7 +81,7 @@ export default {
       }
       // 判断数组的首个是否是地址 如果不是则删除
       if (/^\//.test(keyPath[0])) {
-        keyPath.push('')
+        keyPath.unshift('')//加到数组最前面
       }
       var aaa = "";
       var lists = this.rightList;
@@ -94,7 +94,7 @@ export default {
             }
           }
         } else {
-          if (keyPath[2] == lists[i].path || keyPath[1] == lists[i].path) {
+          if (keyPath[0] == lists[i].path || keyPath[1] == lists[i].path) {
             aaa = lists[i].menuname;
           }
         }

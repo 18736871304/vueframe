@@ -3,7 +3,7 @@
   <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../../assets/user.png" />
+        <img src="../../assets/logo.png" />
       </div>
       <el-form label-width="60px" class="login_form" :model="ruleForm2" ref="ruleForm2">
         <el-form-item label="账号:">
@@ -66,15 +66,14 @@ export default {
 
 
       this.logining = true;
-      // var loginParams = {
-      //   mobile: this.ruleForm2.mobile,
-      //   password: md5(this.ruleForm2.password).toUpperCase(),
-      // };
       var loginParams = {
-        mobile: "13888888888",
-        // password: "E10ADC3949BA59ABBE56E057F20F883E",
-        password: md5("123456").toUpperCase(),
+        mobile: this.ruleForm2.mobile,
+        password: md5(this.ruleForm2.password).toUpperCase(),
       };
+      // var loginParams = {
+      //   mobile: "13888888888",
+      //   password: md5("123456").toUpperCase(),
+      // };
 
       login(loginParams).then((res) => {
 
