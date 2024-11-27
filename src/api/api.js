@@ -93,7 +93,7 @@ export const createMenuRelation = params => {
 
 export const getUserAuthList = params => {
   params["userToken"] = sessionStorage.getItem('userToken')
-  return axios.post(base + `/api//user/getUserAuthList`, Qs.stringify(params)).then(res => res.data);
+  return axios.post(base + `/api/user/getUserAuthList`, Qs.stringify(params)).then(res => res.data);
 };
 
 
