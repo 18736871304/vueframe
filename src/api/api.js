@@ -2,6 +2,7 @@ import axios from 'axios';
 import Qs from "qs";
 // let base = 'https://insure.meihualife.com'; //添加域名
 let base = 'http://8.133.195.79'; //添加域名
+// let base = 'http://8.133.195.79:8080'; //添加域名
 
 
 //登录

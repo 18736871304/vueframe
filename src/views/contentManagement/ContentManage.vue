@@ -224,6 +224,7 @@ export default {
         };
 
         axios(config).then(function (res) {
+          console.log(res)
           let url = res.data.imgPath; //拼接成可浏览的图片地址
           // let url = "http://8.133.195.79/api/content/uploadImg/" + res.data.data.path; //拼接成可浏览的图片地址
           insertFn(url, "图片", url); //插入图片
