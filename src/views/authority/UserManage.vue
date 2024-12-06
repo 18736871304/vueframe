@@ -31,6 +31,8 @@
 
       <el-pagination background @current-change="pageClick" :page-size="pageSize" :current-page="pageNum" layout="total, prev, pager, next" :total="pageTotal" class="indexPage">
       </el-pagination>
+
+      
       <el-dialog title="" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <el-form>
           <el-form-item label="姓名">

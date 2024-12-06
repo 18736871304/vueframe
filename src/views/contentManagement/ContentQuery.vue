@@ -27,7 +27,11 @@
         <el-table-column prop="oprname" label="发布人" width="130" align="center"></el-table-column>
         <el-table-column prop="title" label="标题" width="380" align="center"></el-table-column>
         <el-table-column prop="info" label="简介" width="280" align="center"></el-table-column>
-        <el-table-column prop="head_pic_url" label="封面图" width="280" align="center"></el-table-column>
+        <el-table-column label="封面图" width="280" align="center">
+          <template slot-scope="scope">
+            <el-button size="small" type="primary" @click="handleLookImg(scope.row.head_pic_url)">查看</el-button>
+          </template>
+        </el-table-column>
         <!-- <el-table-column label="操作" align="center" width="auto">
           <template slot-scope="scope">
 
@@ -40,6 +44,11 @@
       </el-pagination>
 
     </div>
+
+    <el-dialog :visible.sync="dialogShowImg" append-to-body>
+      <img width="100%" :src="headImageUrl" alt="">
+    </el-dialog>
+
   </div>
 
 </template>
@@ -52,13 +61,14 @@ export default {
     return {
       contentList: [],
       title: '',
-      info:'',
+      info: '',
       searchDate: '',
       // 分页
       pageTotal: 0,
       pageSize: 10,
       pageNum: 1,
-
+      dialogShowImg: false,
+      headImageUrl: '',
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -92,7 +102,7 @@ export default {
     };
   },
   created() { },
-  mounted() { 
+  mounted() {
     this.getContentList("1")
   },
   methods: {
@@ -161,6 +171,12 @@ export default {
       //点击分页
       this.pageNum = page;
       this.getContentList(page);
+    },
+
+    handleLookImg(imgUrl) {
+      console.log(imgUrl)
+      this.headImageUrl = imgUrl
+      this.dialogShowImg = true
     },
 
 

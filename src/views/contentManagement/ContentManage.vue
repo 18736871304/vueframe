@@ -28,7 +28,11 @@
         <el-table-column prop="oprname" label="发布人" width="130" align="center"></el-table-column>
         <el-table-column prop="title" label="标题" width="380" align="center"></el-table-column>
         <el-table-column prop="info" label="简介" width="280" align="center"></el-table-column>
-        <el-table-column prop="head_pic_url" label="封面图" width="280" align="center"></el-table-column>
+        <el-table-column label="封面图" width="280" align="center">
+          <template slot-scope="scope">
+            <el-button size="small" type="primary" @click="handleLookImg(scope.row.head_pic_url)">查看</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" width="auto">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="handleEdit(scope.row)">修改</el-button>
@@ -39,57 +43,64 @@
 
       <el-pagination background @current-change="pageClick" :page-size="pageSize" :current-page="pageNum" layout="total, prev, pager, next" :total="pageTotal" class="indexPage">
       </el-pagination>
-      <el-dialog title="" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false" width="75%">
-        <!-- 标题，简介，内容  头图-->
 
-        <el-form class="contentManage">
-          <el-form-item label="标题">
-            <el-input v-model="digTitle" placeholder="请输入文章标题" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="简介">
-            <el-input v-model="digInfo" placeholder="请输入简介" clearable></el-input>
-          </el-form-item>
+    </div>
 
-          <el-form-item label="封面图">
-            <!-- :on-change="changeHeadUpload" :file-list="fileList" -->
-            <el-upload action="#" accept="image/*" list-type="picture-card" class="upImg" :auto-upload="false" :multiple="false" :limit="1" :file-list="fileList" :on-change="
+    <el-dialog title="" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false" width="75%">
+      <!-- 标题，简介，内容  头图-->
+
+      <el-form class="contentManage">
+        <el-form-item label="标题">
+          <el-input v-model="digTitle" placeholder="请输入文章标题" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="简介">
+          <el-input v-model="digInfo" placeholder="请输入简介" clearable></el-input>
+        </el-form-item>
+
+        <el-form-item label="封面图">
+          <!-- :on-change="changeHeadUpload" :file-list="fileList" -->
+          <el-upload action="#" accept="image/*" list-type="picture-card" class="upImg" :auto-upload="false" :multiple="false" :limit="1" :file-list="fileList" :on-change="
                       (file) => { return changeHeadUpload(file); } ">
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
+            <i slot="default" class="el-icon-plus"></i>
+            <div slot="file" slot-scope="{file}">
 
-                <img class="el-upload-list__item-thumbnail" :src="file.imgPath" alt="">
-                <span class="el-upload-list__item-actions">
-                  <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <!-- <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleDownload(file)">
+              <img class="el-upload-list__item-thumbnail" :src="file.imgPath" alt="">
+              <span class="el-upload-list__item-actions">
+                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <!-- <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleDownload(file)">
                     <i class="el-icon-download"></i>
                   </span> -->
-                  <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                    <i class="el-icon-delete"></i>
-                  </span>
+                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+                  <i class="el-icon-delete"></i>
                 </span>
-              </div>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible" append-to-body>
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-          </el-form-item>
-          <el-form-item label="内容">
-            <div class="rich-text-editor" ref="richTextEditorRef">
-              <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
-              <Editor style="height: 400px; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+              </span>
             </div>
-          </el-form-item>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible" append-to-body>
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+        </el-form-item>
+        <el-form-item label="内容">
+          <div class="rich-text-editor" ref="richTextEditorRef">
+            <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
+            <Editor style="height: 400px; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+          </div>
+        </el-form-item>
 
-        </el-form>
+      </el-form>
 
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="cancel">取 消</el-button>
-          <el-button type="primary" @click="sureAdd">确 定</el-button>
-        </div>
-      </el-dialog>
-    </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="sureAdd">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :visible.sync="dialogShowImg" append-to-body>
+      <img width="100%" :src="headImageUrl" alt="">
+    </el-dialog>
+
   </div>
 
 </template>
@@ -135,10 +146,11 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
-      fileList: [
+      fileList: [ ],
 
-      ],
 
+      dialogShowImg:false,
+      headImageUrl:'',
 
       pickerOptions: {
         shortcuts: [{
@@ -295,7 +307,7 @@ export default {
       var that = this;
 
       console.log(that.fileList)
-      if (that.fileList.length==0) {
+      if (that.fileList.length == 0) {
         that.$message({
           type: "error",
           duration: 3000,
@@ -412,7 +424,11 @@ export default {
       this.pageNum = page;
       this.getContentList(page);
     },
-
+    handleLookImg(imgUrl) {
+      console.log(imgUrl)
+      this.headImageUrl=imgUrl
+      this.dialogShowImg=true
+    },
 
 
 

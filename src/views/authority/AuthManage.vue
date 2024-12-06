@@ -329,6 +329,10 @@ export default {
   display: flex;
   padding: 0px 10px 10px;
 }
+/* 这是筛选项的内容  结束 */
+
+
+
 .el-pagination {
   text-align: right;
 }

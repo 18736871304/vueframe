@@ -27,7 +27,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.template{
+.template {
   padding: 30px 30px 10px;
 }
 .el-input__inner {
@@ -39,6 +39,11 @@ export default {
 .el-table .el-table__cell {
   padding: 0 !important;
 }
+
+ .el-input__icon {
+  line-height: 35px!important;
+}
+
 a {
   text-decoration: none;
 }

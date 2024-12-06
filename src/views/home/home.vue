@@ -1,21 +1,11 @@
 <template>
   <div>
-    <!-- <FilterItem
-      :getsonDatas="getsonDatas"
-      :selectItem="selectItem"
-    ></FilterItem>
-    <div @click="getson">搜索</div>
-    <div @click="chongzhi">重置</div> -->
     <div>欢迎你</div>
   </div>
 </template>
 
 <script>
-// import FilterItem from "../../components/filterItem.vue";
 export default {
-  // components: {
-  //   FilterItem,
-  // },
   data() {
     return {
       getsonDatas: {},

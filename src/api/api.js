@@ -15,6 +15,12 @@ export const logout = params => {
   return axios.post(base + `/api/user/logout`, Qs.stringify(params)).then(res => res.data);
 };
 
+// 修改密码
+export const updatePassWord = params => {
+  params["userToken"] = sessionStorage.getItem('userToken')
+  return axios.post(base + `/api/user/updatePassWord`, Qs.stringify(params)).then(res => res.data);
+};
+
 //数据字典
 export const getDictList = params => {
   return axios.post(base + `/api/common/getDictList`, Qs.stringify(params)).then(res => res.data);

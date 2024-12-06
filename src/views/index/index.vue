@@ -54,23 +54,7 @@ export default {
 .userinfo-inner {
   display: inline-block;
 }
-/* .username {
-  font-size: 15px;
-  color: #999;
-  display: inline-block;
-}
-.username span {
-  margin-left: 10px;
-  margin-right: 5px;
-} */
 
-/* .userinfo-inner img {
-  width: 40px;
-  height: 40px;
-  margin: 5px auto;
-  vertical-align: middle;
-  border-radius: 50%;
-} */
 .huanfu {
   width: 35px;
   height: 35px;
@@ -85,12 +69,6 @@ export default {
   fill: currentColor;
   margin: 15px auto;
 }
-/* .userinfo {
-  
-  float: right;
-  cursor: pointer;
-} */
-
 
 .main {
   display: flex;
@@ -99,8 +77,6 @@ export default {
   bottom: 0px;
   overflow: hidden;
 }
-
-
 
 .item {
   position: relative;
